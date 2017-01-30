@@ -1,1 +1,14 @@
-Here you'll store your final statistical analysis scripts. You should add the following piece of code to the start of each analysis script: `library('ProjectTemplate); load.project()`. You should also do your best to ensure that any code that's shared between the analyses in `src` is moved into the `munge` directory; if you do that, you can execute all of the analyses in the `src` directory in parallel. A future release of ProjectTemplate will provide tools to automatically execute every individual analysis from `src` in parallel.
+Within this folder are files containing code. The organization is as follows:
+
+- **data** *<- code to read/munge raw data*
+  - read in Twitter data
+  - read in emoji data
+- **features** *<- code to transform/append data*
+  - clean twitter data
+  - clean emoji data
+- **models** *<- code to analyze the data*
+  - conduct sentiment analysis on both text and emoji on each tweet
+  - analyize difference between both groups and compare within tweet
+- **visualizations** *<- gode to generate visualizations*
+  - create basic exploratory visualziations (Descriptive Graphs, etc.)
+  - create visuals based on results (Sentiment Analysis)
