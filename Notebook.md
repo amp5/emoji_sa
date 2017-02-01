@@ -4,6 +4,7 @@
 
 - Methodology paper and 2 page paper on data have been added. These will be used to structure analysis and to write final thesis. 
 - Currently thinking about how necessary it is to remove personal identification from scraped Tweets. Professor suggested to remove usernames but then I would be removing a layer of potential informaiton. As in which tweets Trump or Clinton tweeted. Also location data like lat & lon is needed for me to filter out US only sent tweets but could be used to identify people with other information. 
+- should I add QMSS_thesis.Rproj to my gitignore? Not clear on what data Rproj stores on user. 
 
 
 <p align="center">
