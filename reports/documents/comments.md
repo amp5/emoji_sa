@@ -11,6 +11,7 @@ Again, since your unit of analysis is a tweet, who is issuing it may become obsc
 
 
 Peer Review Comments:
+<br>
 Is the table of key words below the hashtags or just general key words in tweets?
 I don't think you need the th or the nd, but that's a stylistic call.
 If someone reads this in 2018 or later "last year" might be odd.  You could say "early that year" instead?
