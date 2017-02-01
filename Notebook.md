@@ -1,4 +1,12 @@
 <p align="center">
+  <b> 1/31/17 and 2/1/17- Day 2 and 3 - Adding Additional Information</b>
+</p>
+
+- Methodology paper and 2 page paper on data have been added. These will be used to structure analysis and to write final thesis. 
+- Currently thinking about how necessary it is to remove personal identification from scraped Tweets. Professor suggested to remove usernames but then I would be removing a layer of potential informaiton. As in which tweets Trump or Clinton tweeted. Also location data like lat & lon is needed for me to filter out US only sent tweets but could be used to identify people with other information. 
+
+
+<p align="center">
   <b> 1/30/17 - Day 1 - Planning</b>
 </p>
 
@@ -61,9 +69,3 @@ General Overview of file organization:
 - **TODO** *<- future improvements, bug fixes*
 - **notebook** *<- high-lelvel project description*
 
-<p align="center">
-  <b> 1/31/17 and 2/1/17- Day 2 and 3 - Adding Additional Information</b>
-</p>
-
-- Methodology paper and 2 page paper on data have been added. These will be used to structure analysis and to write final thesis. 
-- Currently thinking about how necessary it is to remove personal identification from scraped Tweets. Professor suggested to remove usernames but then I would be removing a layer of potential informaiton. As in which tweets Trump or Clinton tweeted. Also location data like lat & lon is needed for me to filter out US only sent tweets but could be used to identify people with other information. 
