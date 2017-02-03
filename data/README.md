@@ -1,3 +1,8 @@
+Raw data can be downloaded via this link. File too large to upload on github.
+
+http://bit.ly/2koVz1L
+
+
 data is formatted as follows:
 - **raw**  *<- original, immutable data dump*
   - Twitter data
