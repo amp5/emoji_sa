@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+id_user_keys.csv
+de_identified_raw.csv
