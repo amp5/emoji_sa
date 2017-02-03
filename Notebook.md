@@ -27,7 +27,7 @@ For now, here is a brief roadmap of the project:
 
 | Main Task  | Sub Task | Completed Definition  | Completed |Date Completed |
 | ------------- | ------------- | ------------- | ------------- |------------- |
-| ETL | Input data  | Able to load and display  | N  | N/A |
+| ETL | Input data  | Able to load and display  | Y  | 2/3/17 |
 | ETL  | Clean data  | Remove unnecessary columns  | N  | N/A |
 | ETL  | Reshape data  | Filter US only  | N  | N/A |
 | Exploration  | Descriptives  | Distribution of tweets per candidate, Num of users, Avg tweet per user  | N  | N/A |
