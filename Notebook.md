@@ -1,3 +1,14 @@
+
+<p align="center">
+  <b> 2/2/17 and 2/3/17- Day 4 and 5 - Deidentifying and Uploading Raw data</b>
+</p>
+- worked on de-identifying twitter data. Replaces screen_name variable with unique user_id in raw data.
+- stored key of sreen_name and user_id in .gitignore so I would still have access to it on my local computer and it could be stored with project while preventing others from seeing this info
+- will most likely use this information when visualizing results. Perhaps seeing what kind of sentiments each candidate had for text and emoji overall
+- de-identified raw data was too large to upload onto github. Have a merge conflict and needed to resolve this. Ended up saving zip file of raw data onto dropbox and posting a link to page on github in data section.
+- decided against removing lon and lat data since main identifying data from raw data set was already replaced.
+- next after cleaning up my data file will need to find out whether I can upload this new cleaned file onto github. Must be under 100 MB or under 27 MB - saw two different messages on github about this. TBD
+
 <p align="center">
   <b> 1/31/17 and 2/1/17- Day 2 and 3 - Adding Additional Information</b>
 </p>
