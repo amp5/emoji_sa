@@ -1,6 +1,6 @@
 
 <p align="center">
-  <b> 2/2/17 and 2/3/17- Day 4 and 5 - Deidentifying and Uploading Raw data</b>
+  <b> 2/2/17 and 2/3/17 - Deidentifying and Uploading Raw data</b>
 </p>
 - worked on de-identifying twitter data. Replaces screen_name variable with unique user_id in raw data.
 - stored key of sreen_name and user_id in .gitignore so I would still have access to it on my local computer and it could be stored with project while preventing others from seeing this info
@@ -10,7 +10,7 @@
 - next after cleaning up my data file will need to find out whether I can upload this new cleaned file onto github. Must be under 100 MB or under 27 MB - saw two different messages on github about this. TBD
 
 <p align="center">
-  <b> 1/31/17 and 2/1/17- Day 2 and 3 - Adding Additional Information</b>
+  <b> 1/31/17 and 2/1/17  - Adding Additional Information</b>
 </p>
 
 - Methodology paper and 2 page paper on data have been added. These will be used to structure analysis and to write final thesis. 
@@ -19,7 +19,7 @@
 
 
 <p align="center">
-  <b> 1/30/17 - Day 1 - Planning</b>
+  <b> 1/30/17 - Planning</b>
 </p>
 
 
