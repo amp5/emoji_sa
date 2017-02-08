@@ -10,7 +10,7 @@
 #    Input_files: tweets_all_sent_mapped.csv
 #    Output_files: id_user_keys.csv and de_identified_raw.csv
 #    Previous_files: N/A
-#    Status: Working on
+#    Status: Completed
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
 setwd("/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis")
@@ -38,5 +38,8 @@ raw <- merge(d, uniq_user, by = "screen_name")
 raw$screen_name <- NULL
 
 write.csv(raw, "de_identified_raw.csv")
+
+
+
 
 
