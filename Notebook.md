@@ -1,3 +1,41 @@
+<p align="center">
+  <b>2/8/17 - Refining Data Set</b>
+</p>
+- Current raw filtered data has 50 variables:
+
+ [1] "X.1"                       "id_str"                   
+ [3] "idx"                       "text"                     
+ [5] "created_at"                "user_lang"                
+ [7] "truncated"                 "retweeted"                
+ [9] "favorite_count"            "verified"                 
+[11] "user_id_str"               "source"                   
+[13] "followers_count"           "in_reply_to_screen_name"  
+[15] "location"                  "retweet_count"            
+[17] "favorited"                 "utc_offset"               
+[19] "statuses_count"            "description"              
+[21] "friends_count"             "user_url"                 
+[23] "geo_enabled"               "in_reply_to_user_id_str"  
+[25] "lang"                      "user_created_at"          
+[27] "favourites_count"          "name"                     
+[29] "time_zone"                 "in_reply_to_status_id_str"
+[31] "protected"                 "listed_count"             
+[33] "place_lon"                 "expanded_url"             
+[35] "place_id"                  "full_name"                
+[37] "lat"                       "country_code"             
+[39] "place_name"                "url"                      
+[41] "country"                   "lon"                      
+[43] "place_type"                "place_lat"                
+[45] "X"                         "Y"                        
+[47] "STATEFP"                   "NAME"                     
+[49] "COUNT"                     "user_id"  
+
+- will keep only the following:
+  - user_id, id_str, created_at, text, geo_enabled, country_code, X, Y, place_lat, lon, lat, place_lon
+- from here will verify that all tweets have been sent within US
+  - final working dataset will include the following:
+    - user_id, id_str, created_at, text
+    - will want to create 2 new vars with confirmed latitude and longitude using the 8 variables above referring to location
+
 
 <p align="center">
   <b> 2/2/17 and 2/3/17 - Deidentifying and Uploading Raw data</b>
