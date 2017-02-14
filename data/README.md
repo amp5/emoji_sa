@@ -1,7 +1,11 @@
-Raw data can be downloaded via this link. File too large to upload on github.
+##### Current processed data can be found here:
+http://bit.ly/2kuGXMA
 
+##### Previously processed data can be found here:
+Non currently exist
+
+##### Raw data can be downloaded via this link. File too large to upload on github.
 http://bit.ly/2koVz1L
-
 
 data is formatted as follows:
 - **raw**  *<- original, immutable data dump*
