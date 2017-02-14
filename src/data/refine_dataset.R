@@ -37,10 +37,6 @@ any(is.na(tw_d$place_lon))
 any(is.na(tw_d$lat))
 any(is.na(tw_d$lon))
 
-# X and place_lon are not identical, although in head() they appear to be
-# Y and place_lat are not identical
-all(tw_d$X == tw_d$place_lon)
-all(tw_d$Y == tw_d$place_lat)
 
 
 # new dataframe without unecessary cols
@@ -57,10 +53,4 @@ points(d$X, d$Y, col = "red", cex = .6)
 # with lat, lon, few tweets come from India and Japan (could be US base in Japan)
 
 write.csv(d, "non_USfiltered.csv")
-
-
-
-
-
-
 
