@@ -29,3 +29,8 @@ John Oliver had a Drumpf campaign if you are looking for more data :)
 I think you explain the dataset very clearly.  I am only confused by the way you will subset your data. 
 In the first paragraph you say hashtags and in the table you use key words. 
 Are you limiting the analysis to tweets that mention the candidates in either or both ways?  That could be a little more explicit.  
+
+
+
+**Assignment 2** - Lit Review
+This is a good start.  I would try to build out your hypothesis and provide evidence to support it.  That is, what do you expect to find and why?  Do you think that studying tweets as opposed to texts will change your results?  And if so in what way?  Any studies that compare studies that compare tweets vs texts (even if it is not about emojis or even if sentiment analysis is not the main methodology employed)?  
