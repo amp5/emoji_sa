@@ -1,4 +1,12 @@
 <p align="center">
+  <b>2/22/17 - Brainstorming data transformations</b>
+</p>
+
+1. create new column for T/F or binary variable representing whether tweet has emoji - use contains 
+2. create subset of only tweets with emoji and text in them
+
+
+<p align="center">
   <b>2/8/17 - Refining Data Set</b>
 </p>
 - Current raw filtered data has 50 variables:
