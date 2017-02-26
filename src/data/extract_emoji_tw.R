@@ -22,9 +22,12 @@ library(stringr)
 
 wrk_d <- read.csv(file.choose())
 
+tst <- head(wrk_d, 20)
 
-tweets <- data.frame(head(wrk_d, 20))
+tweets <- wrk_d[12:13,]
 tweets <- wrk_d
+
+tweets <- tweets[, c("X.1", "text")]
 
 # From looking at sample of tweets, emojis display as format -> \U0001f602
 
@@ -43,8 +46,14 @@ setwd("/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis")
 
 # tweets <- subset(tweets.final, hashtag %in% c('#womensmarch'));
 ## create full tweets by emojis matrix
+tweets$text_n_url <- gsub('http.*\\s*', '', tweets$text)
+
+
+tweets$emoji_conv <- as.factor(iconv(tweets$text_n_url, "latin1", "ASCII", "byte"))
+
 df.s<- matrix(NA, nrow = nrow(tweets), ncol = ncol(emojis)); 
-system.time(df.s <- sapply(emojis$rencoding, regexpr, tweets$text, ignore.case = T, useBytes = T));
+system.time(df.s <- sapply(emojis$rencoding, regexpr, tweets$emoji_conv, ignore.case = T, useBytes = T));
+
 
 
 
@@ -52,6 +61,8 @@ system.time(df.s <- sapply(emojis$rencoding, regexpr, tweets$text, ignore.case =
 rownames(df.s) <- 1:nrow(df.s); 
 colnames(df.s) <- 1:ncol(df.s); 
 df.t <- data.frame(df.s); 
+
+
 df.t$tweetid <- tweets$X.1;
 
 # merge in hashtag data from original tweets dataset
@@ -59,9 +70,12 @@ df.a <- subset(tweets, select = c(tweetid, hashtag));
 df.u <- merge(df.t, df.a, by = 'tweetid'); 
 df.u$z <- 1; 
 df.u <- arrange(df.u, tweetid); 
+
+
+
 tweets.emojis.matrix <- df.t
 ## create emoji count dataset
-df <- subset(tweets.emojis.matrix)[, c(2:843)]; 
+df <- subset(tweets.emojis.matrix)[, c(1:842)]; 
 count <- colSums(df > -1);
 emojis.m <- cbind(count, emojis); 
 emojis.m <- arrange(emojis.m, desc(count));
@@ -76,7 +90,7 @@ emojis.count.p <- subset(emojis.count, select = c(name, dens, count, rank));
 # print summary stats
 subset(emojis.count.p, rank <= 10);
 num.tweets <- nrow(tweets); 
-df.t <- rowSums(tweets.emojis.matrix[, c(2:843)] > -1); 
+df.t <- rowSums(tweets.emojis.matrix[, c(1:842)] > -1); 
 num.tweets.with.emojis <- length(df.t[df.t > 0]); 
 num.emojis <- sum(emojis.count$count);
 
