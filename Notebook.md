@@ -1,4 +1,19 @@
 <p align="center">
+  <b>2/25/17 - Identify Emoji Tweets</b>
+</p>
+**Note to self:** be careful what you name things. And then remove dfs you don't need anymore from working directory
+[] need to rearrange src files. shouldn't all be in data folder
+
+**References:**
+- Used ![this tutorial](https://prismoji.com/2017/02/06/emoji-data-science-in-r-tutorial/) to come up with emoji dictionary. Only 842 emojis and are slightly out of date with the latest and greatest emojis. BUT it should be enough for my purposes
+- https://github.com/PRISMOJI/emojis/blob/master/2017.0206%20emoji%20data%20science%20tutorial/R%20Code%20Parts%202-4%20(PUB).R used the code to create emoji dictionary and attempt to create matrix calculating emoji counts
+- https://github.com/laurenancona/twimoji/tree/master/twitterEmojiProject took emoji dictionary and combined with others
+- http://apps.timwhitlock.info/unicode/inspect/hex/1F614 used this to confirm emoji in tweet
+- https://github.com/twitter/twemoji + http://miningthedetails.com/blog/r/IdentifyEmojiInTweets/ maybe use in future?
+
+
+
+<p align="center">
   <b>2/22/17 - Brainstorming data transformations</b>
 </p>
 
@@ -72,8 +87,9 @@ For now, here is a brief roadmap of the project:
 | Main Task  | Sub Task | Completed Definition  | Completed |Date Completed |
 | ------------- | ------------- | ------------- | ------------- |------------- |
 | ETL | Input data  | Able to load and display  | Y  | 2/3/17 |
-| ETL  | Clean data  | Remove unnecessary columns  | N  | N/A |
-| ETL  | Reshape data  | Filter US only  | N  | N/A |
+| ETL  | Clean data  | Remove unnecessary columns  | Y  | 2/8/17 |
+| ETL  | Reshape data  | Filter US only  | W  | 2/8/17 |
+| ETL  | Extract data  | only Emoji Tweets  | W  | N/A |
 | Exploration  | Descriptives  | Distribution of tweets per candidate, Num of users, Avg tweet per user  | N  | N/A |
 | Exploration  | Visualization  | Images of above  | N  | N/A |
 | Analysis  | Modeling  | Sentiment Analysis - Text and Emojis  | N | N/A |
