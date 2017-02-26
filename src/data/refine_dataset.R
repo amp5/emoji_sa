@@ -40,17 +40,18 @@ any(is.na(tw_d$lon))
 
 
 # new dataframe without unecessary cols
-d <- subset(raw, select = c(user_id, id_str, created_at, text, 
+wrk_d <- subset(raw, select = c(user_id, id_str, created_at, text, 
                              X, Y, place_lat, place_lon ))
 
 # attempting to eyeball points to confirm only US sent tweets
 library(rworldmap)
 testmap <- getMap(resolution = "low")
 plot(testmap, asp = 1)
-points(d$X, d$Y, col = "red", cex = .6)
+points(wrk_d$X, wrk_d$Y, col = "red", cex = .6)
 
 # appears that few tweets are in Europe and Guam(?) with X, Y or place_lat, place_lon
 # with lat, lon, few tweets come from India and Japan (could be US base in Japan)
 
-write.csv(d, "non_USfiltered.csv")
+write.csv(wrk_d, "non_USfiltered.csv")
+
 
