@@ -11,7 +11,7 @@
 #    Status: Working on
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
-
+setwd("/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis")
 library(tidyverse)
 library(plyr)
 library(ggplot2)
@@ -33,18 +33,11 @@ tweets <- wrk_d
 tweets <- tweets[, c("X.1", "text")]
 
 
-
-setwd("/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis")
-
-
 ###### FIND TOP EMOJIS FOR A GIVEN SUBSET OF THE DATA
-
 # From looking at sample of tweets, emojis display as format -> \U0001f602
 # however R encodes this differently, must convert it
 tweets$text_n_url <- gsub('http.*\\s*', '', tweets$text)
-tweets$emoji <- gsub("[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ @!#$%^&*()_+=:]", "", tweets$text_n_url)
-
-
+tweets$emoji <- gsub("[a-zA-Z @!#$%^&*()_+=:?.,]", "", tweets$text_n_url)
 tweets$emoji_conv <- as.factor(iconv(tweets$emoji, "latin1", "ASCII", "byte"))
 
 ## create full tweets by emojis matrix
@@ -52,6 +45,7 @@ emoji.fv <- vapply(emojis$bytes, regexpr,FUN.VALUE = integer(nrow(tweets)),
                    tweets$emoji, useBytes = T )
 rownames(emoji.fv) <- 1:nrow(emoji.fv); 
 colnames(emoji.fv) <- 1:ncol(emoji.fv); 
+## count is off
 df.t <- data.frame(emoji.fv); 
 
 ## create emoji count dataset
@@ -83,7 +77,7 @@ round(100 * (num.tweets.with.emojis / num.tweets), 1);
 num.emojis; 
 nrow(emoji_c)
 
-## count if off....
+
 
 
 
