@@ -23,13 +23,12 @@ library(stringr)
 wrk_d <- read.csv(file.choose())
 
 tst <- head(wrk_d, 20)
-
-tweets <- wrk_d[12:13,]
+tweets <- wrk_d[12:14,]
 tweets <- wrk_d
 
+# for now just concered with text and an id for each tweet
 tweets <- tweets[, c("X.1", "text")]
 
-# From looking at sample of tweets, emojis display as format -> \U0001f602
 
 #### READ IN EMOJI DICTIONARIES
 setwd("/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis/data/external")
@@ -44,43 +43,31 @@ emojis <- merge(emdict.la, emdict.jpb, by = 'name');  emojis$emojiid <- as.numer
 setwd("/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis")
 ###### FIND TOP EMOJIS FOR A GIVEN SUBSET OF THE DATA
 
-# tweets <- subset(tweets.final, hashtag %in% c('#womensmarch'));
-## create full tweets by emojis matrix
+# From looking at sample of tweets, emojis display as format -> \U0001f602
+# however R encodes this differently, must convert it
 tweets$text_n_url <- gsub('http.*\\s*', '', tweets$text)
+tweets$emoji <- gsub("[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ @!#$%^&*()_+=:]", "", tweets$text_n_url)
 
 
-tweets$emoji_conv <- as.factor(iconv(tweets$text_n_url, "latin1", "ASCII", "byte"))
+tweets$emoji_conv <- as.factor(iconv(tweets$emoji, "latin1", "ASCII", "byte"))
 
-df.s<- matrix(NA, nrow = nrow(tweets), ncol = ncol(emojis)); 
-system.time(df.s <- sapply(emojis$rencoding, regexpr, tweets$emoji_conv, ignore.case = T, useBytes = T));
+## create full tweets by emojis matrix
+emoji.fv <- vapply(emojis$bytes, regexpr,FUN.VALUE = integer(nrow(tweets)),
+                                 tweets$text, useBytes = T )
+rownames(emoji.fv) <- 1:nrow(emoji.fv); 
+colnames(emoji.fv) <- 1:ncol(emoji.fv); 
+df.t <- data.frame(emoji.fv); 
 
-
-
-
-
-rownames(df.s) <- 1:nrow(df.s); 
-colnames(df.s) <- 1:ncol(df.s); 
-df.t <- data.frame(df.s); 
-
-
-df.t$tweetid <- tweets$X.1;
-
-# merge in hashtag data from original tweets dataset
-df.a <- subset(tweets, select = c(tweetid, hashtag)); 
-df.u <- merge(df.t, df.a, by = 'tweetid'); 
-df.u$z <- 1; 
-df.u <- arrange(df.u, tweetid); 
-
-
-
-tweets.emojis.matrix <- df.t
 ## create emoji count dataset
-df <- subset(tweets.emojis.matrix)[, c(1:842)]; 
+df <- subset(df.t)[, c(1:842)]; 
 count <- colSums(df > -1);
+
 emojis.m <- cbind(count, emojis); 
 emojis.m <- arrange(emojis.m, desc(count));
 
-emojis.count <- subset(emojis.m, count > 1); 
+
+# something wrong going to next step....
+emojis.count <- subset(emojis.m, emojis.m$count > 1); 
 emojis.count$dens <- round(1000 * (emojis.count$count / nrow(tweets)), 1); 
 emojis.count$dens.sm <- (emojis.count$count + 1) / (nrow(tweets) + 1);
 
