@@ -2,21 +2,27 @@
   <b>2/26/17 - Identify Emoji Tweets - Continued....</b>
 </p>
 
-**References**
-- https://www.slideshare.net/rdatamining/text-mining-with-r-an-analysis-of-twitter-data use for text analysis - exploratory
-- https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html and maybe https://guangchuangyu.github.io/2015/12/use-emoji-font-in-r/ use for ggplot2 when graphing emoji
-- Used http://opiateforthemass.es/articles/emoticons-in-R/ to convert the emojis into rencoding in order to classify
-- Used http://miningthedetails.com/blog/r/IdentifyEmojiInTweets/ to help with emoji calculation
+Spent all of ysterday and today trying to extract which tweets had emojis and which didn't and then counting the differnt types of tweets. Was planning on doing that in that order but ended up finding code on internet in the reverse order. That is with a test data set I  was able to identify which emojis in a tweet were counted and then I refined the large data set to look at only tweets with emojis present. For the most part I think I was able to do this. Out of 1.8 million tweets (1816475 to be exact), I reduced my working df to one of 152,516 tweets. That includes retweets AND some tweets that don't have emojis but have special characters. I'll refine this after I calculate which emojis are in which tweets. 
 
+First though I need to do this:
+- [ ] will need to confirm that duplicate tweets are removed.... (in main dataset -> wrk_d)
 
-
-- [ ] add ranking section later
+1. Then after I do that I will re-run my code to generate 'emoji_twts'.
+2. From there I will run the rest of the code I have in file 'extract_emoji_tw.R'
+3. Then I will fix ranking section
+4. From there do some basic descriptive analysis on emojis present
+5. Do the dame descriptive work for the text.
 
 There appears to be a problem with the counting. It isn;t with the code I don't think but with the recoding that R does for emojis
 ![](https://cloud.githubusercontent.com/assets/5368361/23345620/0d6b86b2-fc5f-11e6-975b-728f08a57a2a.png)
 
 The picture above shows some sample data I'm working with. Row 23 visually has 5 smiling crying faces. but the converted emoji into bytes isn't the same sequence of code 5 times. The first sequence "<f0><9f><98><ad>" is not the same as the others "<f0><9f><98><82>". At this point I don't know why it is doing that but when I count them I'm only getting three for that one. And one for the crying cat face (row) 13. At the moment I will keep moving forward with the code and make note of this in my report so the sentiment will not be 100% accurate for the emoji because it will be losing the frequency for the emojis but so far it appears to be at least counting that some of the same emoji exists in a tweet. And it is also counting the unique emojis. 
 
+**References**
+- https://www.slideshare.net/rdatamining/text-mining-with-r-an-analysis-of-twitter-data use for text analysis - exploratory
+- https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html and maybe https://guangchuangyu.github.io/2015/12/use-emoji-font-in-r/ use for ggplot2 when graphing emoji
+- Used http://opiateforthemass.es/articles/emoticons-in-R/ to convert the emojis into rencoding in order to classify
+- Used http://miningthedetails.com/blog/r/IdentifyEmojiInTweets/ to help with emoji calculation
 
 <p align="center">
   <b>2/25/17 - Identify Emoji Tweets</b>
