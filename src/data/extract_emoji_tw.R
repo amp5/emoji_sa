@@ -65,26 +65,24 @@ count <- colSums(df > -1);
 emojis.m <- cbind(count, emojis); 
 emojis.m <- arrange(emojis.m, desc(count));
 
+emoji_c <- subset(emojis.m, count > 0)
+emoji_c$dens <- round(1000 * (emoji_c$count / nrow(tweets)), 1); 
+emoji_c$dens_sm <- (emoji_c$count + 1) / (nrow(tweets) + 1);
 
-# something wrong going to next step....
-emojis.count <- subset(emojis.m, emojis.m$count > 1); 
-emojis.count$dens <- round(1000 * (emojis.count$count / nrow(tweets)), 1); 
-emojis.count$dens.sm <- (emojis.count$count + 1) / (nrow(tweets) + 1);
-
-emojis.count$rank <- as.numeric(row.names(emojis.count));
-emojis.count.p <- subset(emojis.count, select = c(name, dens, count, rank));
+#emoji_c$rank <- as.numeric(row.names(emoji_c));
+#emoji_cp <- subset(emoji_p, select = c(name, dens, count, rank));
 
 # print summary stats
-subset(emojis.count.p, rank <= 10);
+#subset(emojis.count.p, rank <= 10);
 num.tweets <- nrow(tweets); 
-df.t <- rowSums(tweets.emojis.matrix[, c(1:842)] > -1); 
-num.tweets.with.emojis <- length(df.t[df.t > 0]); 
-num.emojis <- sum(emojis.count$count);
+tweets_w_emojis <- rowSums(df.t[, c(1:842)] > -1); 
+num.tweets.with.emojis <- length(tweets_w_emojis[tweets_w_emojis > 0]); 
+num.emojis <- sum(emoji_c$count);
 
 
 num.tweets; 
 num.tweets.with.emojis; 
 round(100 * (num.tweets.with.emojis / num.tweets), 1); 
 num.emojis; 
-nrow(emojis.count)
+nrow(emoji_c)
 
