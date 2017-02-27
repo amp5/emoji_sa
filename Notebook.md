@@ -1,4 +1,14 @@
 <p align="center">
+  <b>2/26/17 - Identify Emoji Tweets - Continued....</b>
+</p>
+
+**References**
+- https://www.slideshare.net/rdatamining/text-mining-with-r-an-analysis-of-twitter-data use for text analysis - exploratory
+- https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html and maybe https://guangchuangyu.github.io/2015/12/use-emoji-font-in-r/ use for ggplot2 when graphing emoji
+- Used http://opiateforthemass.es/articles/emoticons-in-R/ to convert the emojis into rencoding in order to classify
+- Used http://miningthedetails.com/blog/r/IdentifyEmojiInTweets/ to help with emoji calculation
+
+<p align="center">
   <b>2/25/17 - Identify Emoji Tweets</b>
 </p>
 **Note to self:** be careful what you name things. And then remove dfs you don't need anymore from working directory
