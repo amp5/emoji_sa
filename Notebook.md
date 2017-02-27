@@ -7,6 +7,7 @@
 - https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html and maybe https://guangchuangyu.github.io/2015/12/use-emoji-font-in-r/ use for ggplot2 when graphing emoji
 - Used http://opiateforthemass.es/articles/emoticons-in-R/ to convert the emojis into rencoding in order to classify
 - Used http://miningthedetails.com/blog/r/IdentifyEmojiInTweets/ to help with emoji calculation
+[] add ranking section later
 
 <p align="center">
   <b>2/25/17 - Identify Emoji Tweets</b>
