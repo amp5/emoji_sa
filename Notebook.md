@@ -8,7 +8,15 @@
 - Used http://opiateforthemass.es/articles/emoticons-in-R/ to convert the emojis into rencoding in order to classify
 - Used http://miningthedetails.com/blog/r/IdentifyEmojiInTweets/ to help with emoji calculation
 
+
+
 - [ ] add ranking section later
+
+There appears to be a problem with the counting. It isn;t with the code I don't think but with the recoding that R does for emojis
+![](https://cloud.githubusercontent.com/assets/5368361/23345620/0d6b86b2-fc5f-11e6-975b-728f08a57a2a.png)
+
+The picture above shows some sample data I'm working with. Row 23 visually has 5 smiling crying faces. but the converted emoji into bytes isn't the same sequence of code 5 times. The first sequence "<f0><9f><98><ad>" is not the same as the others "<f0><9f><98><82>". At this point I don't know why it is doing that but when I count them I'm only getting three for that one. And one for the crying cat face (row) 13. At the moment I will keep moving forward with the code and make note of this in my report so the sentiment will not be 100% accurate for the emoji because it will be losing the frequency for the emojis but so far it appears to be at least counting that some of the same emoji exists in a tweet. And it is also counting the unique emojis. 
+
 
 <p align="center">
   <b>2/25/17 - Identify Emoji Tweets</b>
