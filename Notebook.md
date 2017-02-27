@@ -8,13 +8,13 @@
 - Used http://opiateforthemass.es/articles/emoticons-in-R/ to convert the emojis into rencoding in order to classify
 - Used http://miningthedetails.com/blog/r/IdentifyEmojiInTweets/ to help with emoji calculation
 
-[] add ranking section later
+- [ ] add ranking section later
 
 <p align="center">
   <b>2/25/17 - Identify Emoji Tweets</b>
 </p>
 **Note to self:** be careful what you name things. And then remove dfs you don't need anymore from working directory
-[] need to rearrange src files. shouldn't all be in data folder
+- [ ] need to rearrange src files. shouldn't all be in data folder
 
 **References:**
 - Used ![this tutorial](https://prismoji.com/2017/02/06/emoji-data-science-in-r-tutorial/) to come up with emoji dictionary. Only 842 emojis and are slightly out of date with the latest and greatest emojis. BUT it should be enough for my purposes
