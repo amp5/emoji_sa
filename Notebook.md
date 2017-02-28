@@ -1,4 +1,14 @@
 <p align="center">
+  <b>2/26/17 - Summary of next steps</b>
+</p>
+
+- [ ] turn dataframe into tibble
+- [ ] remove duplicate tweets
+- [ ] check that all code it working (remove save to environment when I close Rstudio)
+- [ ] run emoji extraction again
+- [ ] map emoji only tweets to see location is US only
+
+<p align="center">
   <b>2/26/17 - Identify Emoji Tweets - Continued....</b>
 </p>
 
@@ -29,7 +39,7 @@ The picture above shows some sample data I'm working with. Row 23 visually has 5
   <b>2/25/17 - Identify Emoji Tweets</b>
 </p>
 **Note to self:** be careful what you name things. And then remove dfs you don't need anymore from working directory
-- [ ] need to rearrange src files. shouldn't all be in data folder
+- [x] need to rearrange src files. shouldn't all be in data folder
 
 **References:**
 - Used ![this tutorial](https://prismoji.com/2017/02/06/emoji-data-science-in-r-tutorial/) to come up with emoji dictionary. Only 842 emojis and are slightly out of date with the latest and greatest emojis. BUT it should be enough for my purposes
