@@ -7,6 +7,7 @@
 - check encoding of emojis and text with writeLines()
 - create heatmap of tweets for location? maybe?
 - remove retweets in orig dataset
+- map SA of text vs emoji in QGIS (easier program to do this)
 
 <p align="center">
   <b>2/26/17 - Summary of next steps</b>
