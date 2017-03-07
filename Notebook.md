@@ -5,6 +5,7 @@
 - filter only US for all tweets and map before emoji to see if I can get all US tweets only
 - when looking for emoji sentiment score, use a left_join() with x being my data and y being the file from emoji SA
 - check encoding of emojis and text with writeLines()
+- [ ] create heatmap of tweets for location? maybe?
 
 <p align="center">
   <b>2/26/17 - Summary of next steps</b>
