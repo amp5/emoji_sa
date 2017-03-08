@@ -9,6 +9,7 @@
 - remove retweets in orig dataset
 - map SA of text vs emoji in QGIS (easier program to do this)
 - when I do text analysis, make note that in paper talk about how this removes any emoticons and any punctuation marks that might give more nuancd sentiment. So losing information. 
+- can find no reason at the moment where I'd need the time for each tweet. will use date only and use lubridate package
 
 <p align="center">
   <b>2/26/17 - Summary of next steps</b>
