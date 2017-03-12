@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+tweets_all_sent_mapped.csv
 id_user_keys.csv
 de_identified_raw.csv
 de_identified_raw.csv.zip
