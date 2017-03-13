@@ -36,10 +36,8 @@ e <- as_tibble(emojis)
 
 #tst <- head(d, 25)
 #tweets <- d[12:14,]
-tweets <- d[12,]
-
-
-#tweets <- d[12:25,]
+#tweets <- d[12,]
+tweets <- d[12:25,]
 #tweets <- d
 
 # for now just concered with text and an id for each tweet
@@ -60,23 +58,20 @@ twts$emoji <- sub("/", "", twts$emoji)
 twts <- as_tibble(twts)
 e_twts <- filter(twts, !(twts$emoji == ""))
 
-#k <- e_twts %>%
-#  mutate(list_o_char = strsplit(emoji, ""))
-
+e_twts <- e_twts %>%
+  mutate(list_o_char = strsplit(emoji, "")) %>%
+  mutate(num = map_int(list_o_char, length)) %>%
+  unnest()
 
 ############################################### Not counting some duplicates of emojis #########################
 ## create full tweets by emojis matrix
 
-
-
-
-
-has_emoji <- vapply(e$bytes, regexpr, FUN.VALUE = integer(nrow(k)),
-                   k$list_o_char[], useBytes = T )
+has_emoji <- vapply(e$bytes, regexpr, FUN.VALUE = integer(nrow(e_twts)),
+                    e_twts$list_o_char, useBytes = T )
 
 rownames(has_emoji) <- 1:nrow(has_emoji)
 colnames(has_emoji) <- 1:ncol(has_emoji) 
-emoji_twts <- tibble::as_data_frame(has_emoji) 
+emoji_twts <- tibble::as_data_frame(has_emoji)
 
 count <- colSums(has_emoji > -1)
 
@@ -87,15 +82,14 @@ emoji_c <- subset(emojis_m, count > 0)
 emoji_c$dens <- round(1000 * (emoji_c$count / nrow(twts)), 1) 
 emoji_c$dens_sm <- (emoji_c$count + 1) / (nrow(twts) + 1)
 
-#add ranking section later
-# order decscending percentage then do head for top 10
-#emoji_c$rank <- as.numeric(row.names(emoji_c));
-#emoji_cp <- subset(emoji_p, select = c(name, dens, count, rank));
-
-# print summary stats
-#subset(emojis.count.p, rank <= 10);
 
 
+
+
+
+
+###### Would need to regroup or nest() before doing this calc just be 
+######  careful as the nrows of emoj-_twts is unnested form of emojis
 num_twts <- nrow(twts) 
 tweets_w_emojis <- rowSums(emoji_twts[, c(1:842)] > -1)
 num_tweets_w_emojis <- length(tweets_w_emojis[tweets_w_emojis > 0])
@@ -108,10 +102,15 @@ round(100 * (num_tweets_w_emojis / num_twts), 1)
 num_emojis
 nrow(emoji_c)
 
-emoji_c %>%
-  summarise()
+
   
-  
+#add ranking section later
+# order decscending percentage then do head for top 10
+#emoji_c$rank <- as.numeric(row.names(emoji_c));
+#emoji_cp <- subset(emoji_p, select = c(name, dens, count, rank));
+
+# print summary stats
+#subset(emojis.count.p, rank <= 10);  
 
 
 # Creating outputs  -------------------------------------------------------
