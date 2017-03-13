@@ -1,4 +1,23 @@
 <p align="center">
+  <b>3/13/17 - Revamp</b>
+</p>
+
+First off, I made sure that my code is reproducible by deleting my R environment and redoing all of the code from scratch. Things I have learned from the data so far:
+- currently contains no retweets (per var retweeted)
+- currently contains no tweets with country_code outside of US (despite a few tweet coordinates showing up in Europe and Asia)
+- there are 237,499 unique users in large data set and [INSERT EMOJI_TWEET USERS]
+- there are 1,816,475 original tweets and 93,411 tweets with emojis in them (~ 5% of all tweets) which is similar to average geolocated ratio but a bit surprising here. Would have thought there were more emojis used. But then again these tweets are about the primaries...
+- there were no instances of the following vars: `retweet_count` `favorited` `fav_count` `protected `
+- all tweets had the following vars: `truncated`, `geo_enabled`
+- The emoji dictionary has 842 different emojis and the code I have now has found 727 different emojis in the tweets
+- decided to use `place_lat` and `place_lon` over the other two pairs of coordinate data because 1) `lat` and `lon` had missing values whereas place vars didn't and 2) while `X` and `Y` didn't have missing values only some of the pairs matched with theplace vars. When i attempted to figure out what the difference between the two vars was I couldn't find the right documentation and all of the tutorials and articles I found online used the place vars to map coordinated and not the X/Y vars. So I'll stick with the trend until told otherwise. 
+- `lang` is not a good var to filter on if looking for all tweets in english. There were a total of 45 different languages identified for all tweets (1.8 mil tweets) and after checking a few examples found that this var does not equate to the tweet not being in English. 
+- I originally had the date-time information for each tweet but I think I will only need the date so the current data file only has date and not time for each tweet
+- Of the huge data set there were 24,453 verified tweets and 1,792,022 unverified tweets. Potentially something to look into further with emoji tweets?
+
+Still trying to figure out this whole not captured all emojis in a tweet thing. And have all the data I need in a tidy data set. TBD on that part.
+
+<p align="center">
   <b>3/06/17 - Thinking about...</b>
 </p>
 
@@ -17,9 +36,9 @@
   <b>2/26/17 - Summary of next steps</b>
 </p>
 
-- [ ] turn dataframe into tibble
-- [ ] remove duplicate tweets
-- [ ] check that all code it working (remove save to environment when I close Rstudio)
+- [x] turn dataframe into tibble
+- [x] remove duplicate tweets
+- [x] check that all code it working (remove save to environment when I close Rstudio)
 - [ ] run emoji extraction again
 - [ ] map emoji only tweets to see location is US only
 
@@ -30,7 +49,7 @@
 Spent all of ysterday and today trying to extract which tweets had emojis and which didn't and then counting the differnt types of tweets. Was planning on doing that in that order but ended up finding code on internet in the reverse order. That is with a test data set I  was able to identify which emojis in a tweet were counted and then I refined the large data set to look at only tweets with emojis present. For the most part I think I was able to do this. Out of 1.8 million tweets (1816475 to be exact), I reduced my working df to one of 152,516 tweets. That includes retweets AND some tweets that don't have emojis but have special characters. I'll refine this after I calculate which emojis are in which tweets. 
 
 First though I need to do this:
-- [ ] will need to confirm that duplicate tweets are removed.... (in main dataset -> wrk_d)
+- [x] will need to confirm that duplicate tweets are removed.... (in main dataset -> wrk_d)
 
 1. Then after I do that I will re-run my code to generate 'emoji_twts'.
 2. From there I will run the rest of the code I have in file 'extract_emoji_tw.R'
