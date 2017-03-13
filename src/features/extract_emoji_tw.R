@@ -5,71 +5,87 @@
 #    Author: amp5
 #    Purpose: Identify which tweets have emojis in them and which do not. 
 #             From there filter out all tweets with at least one emoji.
-#    Input_files: non_USfiltered.csv, full_emoji_db.csv
-#    Output_files: 
-#    Previous_files: emoji_databases.R
+#             - separate out just tweets and ids then merge back with big tibble at end
+#             - figure out how many unique users and how many tweets after only emoji extracted
+#    Input_files: filtered.csv, full_emoji_db.csv
+#    Output_files: TBD
+#    Previous_files: emoji_databases.R and refine_dataset.R
+#    Required by: extract_emoji_tw.R
 #    Status: Working on
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
-setwd("/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis")
 library(tidyverse)
 library(plyr)
 library(ggplot2)
 library(splitstackshape)
 library(stringr)
-# instead of reloading input files, working with dataframe wrk_d which was
-# saved as non_USfiltered.csv
-# also full emoji list is referred to with internal var name emojis 
-# csv called full_emoji_db.csv
 
+# Setting path and loading files ------------------------------------------
+path <- "/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis" 
+setwd(path)
+
+# load filtered.csv
 wrk_d <- read.csv(file.choose())
+# load full_emoji_db.csv
+emojis <- read.csv(file.choose())
 
-tst <- head(wrk_d, 25)
-tweets <- wrk_d[12:14,]
-tweets <- wrk_d[12:25,]
-tweets <- wrk_d
+
+# Code --------------------------------------------------------------------
+d <- as_tibble(wrk_d)
+e <- as_tibble(emojis)
+
+#tst <- head(d, 25)
+#tweets <- d[12:14,]
+tweets <- d[12,]
+
+
+#tweets <- d[12:25,]
+#tweets <- d
 
 # for now just concered with text and an id for each tweet
-tweets <- tweets[, c("X.1", "text")]
+tweets <- tweets[, c("X", "text")]
 
 ###### FIND TOP EMOJIS FOR A GIVEN SUBSET OF THE DATA
 # From looking at sample of tweets, emojis display as format -> \U0001f602
 # however R encodes this differently, must convert it
-tweets$text_n_url <- gsub('http.*\\s*', '', tweets$text)
-tweets$emoji <- gsub("[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ @!#$%^&*()|_+=:?.,;1234567890-]", "", tweets$text_n_url)
-#tweets$emoji_conv <- as.factor(iconv(tweets$emoji, "latin1", "ASCII", "byte"))
-tweets$emoji <- noquote(tweets$emoji)
-tweets$emoji <- gsub("'", '', tweets$emoji)
-tweets$emoji <- gsub("''", '', tweets$emoji)
-tweets$emoji <- sub("/", "", tweets$emoji)
-tweets$emoji <- sub("//", "", tweets$emoji) 
+twts <- tweets %>%
+  mutate(text_n_url = gsub('http.*\\s*', '', text)) %>%
+  mutate(emoji = gsub("[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ @!#$%^&*()|_+=:?.,;1234567890-]", "", text_n_url)) 
 
-emoji_twts <- tweets[!(tweets$emoji == ""),]
+twts$emoji <- gsub("''", '', twts$emoji)
+twts$emoji <- sub("//", "", twts$emoji)
+twts$emoji <- gsub("'", '', twts$emoji)
+twts$emoji <- sub("/", "", twts$emoji)
 
-############################################### STOPPED HERE 2/27/17 MIDNIGHT #########################
+twts <- as_tibble(twts)
+e_twts <- filter(twts, !(twts$emoji == ""))
+
+#k <- e_twts %>%
+#  mutate(list_o_char = strsplit(emoji, ""))
+
+
+############################################### Not counting some duplicates of emojis #########################
 ## create full tweets by emojis matrix
-emoji.fv <- vapply(emojis$bytes, regexpr,FUN.VALUE = integer(nrow(tweets)),
-                   tweets$emoji, useBytes = T )
-rownames(emoji.fv) <- 1:nrow(emoji.fv); 
-colnames(emoji.fv) <- 1:ncol(emoji.fv); 
-## count is off
-df.t <- data.frame(emoji.fv); 
 
 
-#count row sum and if row has no positive numbers don't save in new list
- 
 
 
-## create emoji count dataset
-df <- subset(df.t)[, c(1:842)]; 
-count <- colSums(df > -1);
 
-emojis.m <- cbind(count, emojis); 
-emojis.m <- arrange(emojis.m, desc(count));
+has_emoji <- vapply(e$bytes, regexpr, FUN.VALUE = integer(nrow(k)),
+                   k$list_o_char[], useBytes = T )
 
-emoji_c <- subset(emojis.m, count > 0)
-emoji_c$dens <- round(1000 * (emoji_c$count / nrow(tweets)), 1); 
-emoji_c$dens_sm <- (emoji_c$count + 1) / (nrow(tweets) + 1);
+rownames(has_emoji) <- 1:nrow(has_emoji)
+colnames(has_emoji) <- 1:ncol(has_emoji) 
+emoji_twts <- tibble::as_data_frame(has_emoji) 
+
+count <- colSums(has_emoji > -1)
+
+emojis_m <- cbind(count, emojis) 
+emojis_m <- arrange(emojis_m, desc(count))
+
+emoji_c <- subset(emojis_m, count > 0)
+emoji_c$dens <- round(1000 * (emoji_c$count / nrow(twts)), 1) 
+emoji_c$dens_sm <- (emoji_c$count + 1) / (nrow(twts) + 1)
 
 #add ranking section later
 # order decscending percentage then do head for top 10
@@ -78,19 +94,27 @@ emoji_c$dens_sm <- (emoji_c$count + 1) / (nrow(tweets) + 1);
 
 # print summary stats
 #subset(emojis.count.p, rank <= 10);
-num.tweets <- nrow(tweets); 
-tweets_w_emojis <- rowSums(df.t[, c(1:842)] > -1); 
-num.tweets.with.emojis <- length(tweets_w_emojis[tweets_w_emojis > 0]); 
-num.emojis <- sum(emoji_c$count);
 
 
-num.tweets; 
-num.tweets.with.emojis; 
-round(100 * (num.tweets.with.emojis / num.tweets), 1); 
-num.emojis; 
+num_twts <- nrow(twts) 
+tweets_w_emojis <- rowSums(emoji_twts[, c(1:842)] > -1)
+num_tweets_w_emojis <- length(tweets_w_emojis[tweets_w_emojis > 0])
+num_emojis <- sum(emoji_c$count)
+
+
+num_twts
+num_tweets_w_emojis
+round(100 * (num_tweets_w_emojis / num_twts), 1)
+num_emojis
 nrow(emoji_c)
 
+emoji_c %>%
+  summarise()
+  
+  
 
+
+# Creating outputs  -------------------------------------------------------
 
 
 
