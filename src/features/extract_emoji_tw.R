@@ -59,23 +59,27 @@ twts <- as_tibble(twts)
 e_twts <- filter(twts, !(twts$emoji == ""))
 
 e_twts <- e_twts %>%
-  mutate(list_o_char = strsplit(emoji, "")) %>%
-  mutate(num = map_int(list_o_char, length)) %>%
+  mutate(singl_emoji = strsplit(emoji, "")) %>%
+  mutate(num = map_int(singl_emoji, length)) %>%
   unnest()
+
+
+
+#################
+### need to try and get either byte or emoji id linked to e_twts's list_o_char
 
 ############################################### Not counting some duplicates of emojis #########################
 ## create full tweets by emojis matrix
 
 has_emoji <- vapply(e$bytes, regexpr, FUN.VALUE = integer(nrow(e_twts)),
-                    e_twts$list_o_char, useBytes = T )
+                    e_twts$singl_emoji, useBytes = T )
 
 rownames(has_emoji) <- 1:nrow(has_emoji)
 colnames(has_emoji) <- 1:ncol(has_emoji) 
 emoji_twts <- tibble::as_data_frame(has_emoji)
 
 count <- colSums(has_emoji > -1)
-
-emojis_m <- cbind(count, emojis) 
+emojis_m <- cbind(count, e) 
 emojis_m <- arrange(emojis_m, desc(count))
 
 emoji_c <- subset(emojis_m, count > 0)
@@ -86,6 +90,13 @@ emoji_c$dens_sm <- (emoji_c$count + 1) / (nrow(twts) + 1)
 
 
 
+
+  
+emoji_ids <- which(emoji_twts > 0, arr.ind = T) 
+
+
+
+  
 
 
 ###### Would need to regroup or nest() before doing this calc just be 
