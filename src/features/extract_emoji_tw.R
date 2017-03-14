@@ -37,11 +37,13 @@ e <- as_tibble(emojis)
 #tst <- head(d, 25)
 #tweets <- d[12:14,]
 #tweets <- d[12,]
-tweets <- d[12:25,]
+tweets <- d[1:25,]
 #tweets <- d
 
 # for now just concered with text and an id for each tweet
 tweets <- tweets[, c("X", "text")]
+
+
 
 ###### FIND TOP EMOJIS FOR A GIVEN SUBSET OF THE DATA
 # From looking at sample of tweets, emojis display as format -> \U0001f602
@@ -58,11 +60,12 @@ twts$emoji <- sub("/", "", twts$emoji)
 twts <- as_tibble(twts)
 e_twts <- filter(twts, !(twts$emoji == ""))
 
+
 e_twts <- e_twts %>%
   mutate(singl_emoji = strsplit(emoji, "")) %>%
   mutate(num = map_int(singl_emoji, length)) %>%
   unnest()
-
+e_twts$internal_id <- 1:nrow(e_twts)
 
 
 #################
@@ -87,16 +90,20 @@ emoji_c$dens <- round(1000 * (emoji_c$count / nrow(twts)), 1)
 emoji_c$dens_sm <- (emoji_c$count + 1) / (nrow(twts) + 1)
 
 
+emoji_ids <- tibble::as_data_frame(which(emoji_twts > 0, arr.ind = T) )
+result <- merge(e_twts, emoji_ids, by.x = "internal_id", by.y = "row", all.x = TRUE)
+colnames(result)[8] <- "emoji_id"
+
+
+final <- result %>%
+  filter(!(is.na(result$col))) %>%
+  group_by(X, text, emoji) %>% 
+  nest(col)
 
 
 
 
-  
-emoji_ids <- which(emoji_twts > 0, arr.ind = T) 
 
-
-
-  
 
 
 ###### Would need to regroup or nest() before doing this calc just be 
