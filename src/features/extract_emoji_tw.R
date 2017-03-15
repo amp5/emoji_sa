@@ -8,10 +8,10 @@
 #             - separate out just tweets and ids then merge back with big tibble at end
 #             - figure out how many unique users and how many tweets after only emoji extracted
 #    Input_files: filtered.csv, full_emoji_db.csv
-#    Output_files: TBD
+#    Output_files: extracted_emojis.Rda
 #    Previous_files: emoji_databases.R and refine_dataset.R
-#    Required by: extract_emoji_tw.R
-#    Status: Working on
+#    Required by: exploratoy_data_analysis.R
+#    Status: Completed
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
 library(tidyverse)
