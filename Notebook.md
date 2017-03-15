@@ -1,4 +1,34 @@
 <p align="center">
+  <b>3/14/17 - EDA</b>
+</p>
+
+Focus for now will be EDA - exploratpry data analysis. Below are things that I shoudl answer / visualize:
+- How many tweets have emojis vs not (bar chart)
+- top 10 or 20 most commonly used emojis
+- map tweets with emojis (are any outside US like before?)
+- average number of emojis per tweet. Or the overall distribution
+- when tweet created (scatter plot of num tweets by day)
+- which language (lang) tweet 
+- how many tweets with emojis and how many unique users
+- average amount of tweets per user
+- verified vs not verified emoji tweets
+
+**Note** It appears that the American flag is not being captured by emoji extraction. Last col in image below represents unique emoji_id but this emoji returns NA. 
+![](https://cloud.githubusercontent.com/assets/5368361/23931625/454d699a-0909-11e7-9731-b9344becdbd0.png)
+
+**Note** Emojis with various skin color options are counted as two emojis for one image but only one emoji_id is identified..... Usefult to add to paper somewhere
+![](https://cloud.githubusercontent.com/assets/5368361/23931612/3b8683f6-0909-11e7-8370-25ebe5388530.png)
+
+**Note** Also, some emojis were not identified but overall I think it did a fairly good job... Could have been emoji not in the 800~ list
+![](https://cloud.githubusercontent.com/assets/5368361/23931608/36a9979c-0909-11e7-98c0-edbae274aa76.png)
+
+
+**Reference**
+- Used https://rpubs.com/twgrant/132808 for code to make maps
+- Used https://github.com/today-is-a-good-day/Emoticons/blob/master/postEmoticons.R and http://opiateforthemass.es/articles/emoticons-in-R/ to help match emojis in tweets with correct emoji in dictionary
+
+
+<p align="center">
   <b>3/13/17 - Revamp</b>
 </p>
 
