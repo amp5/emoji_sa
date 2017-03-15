@@ -2,7 +2,7 @@
   <b>3/14/17 - EDA</b>
 </p>
 
-Focus for now will be EDA - exploratpry data analysis. Below are things that I shoudl answer / visualize:
+Focus for now will be EDA - exploratory data analysis. Below are things that I shoudl answer / visualize:
 - How many tweets have emojis vs not (bar chart)
 - top 10 or 20 most commonly used emojis
 - map tweets with emojis (are any outside US like before?)
