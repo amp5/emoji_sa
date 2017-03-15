@@ -9,3 +9,4 @@ de_identified_raw.csv.zip
 load_raw.R
 non_USfiltered.csv
 filtered.csv
+extracted_emojis.Rda
