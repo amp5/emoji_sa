@@ -37,13 +37,11 @@ e <- as_tibble(emojis)
 #tst <- head(d, 25)
 #tweets <- d[12:14,]
 #tweets <- d[12,]
-tweets <- d[1:25,]
-#tweets <- d
+#tweets <- d[1:25,]
+tweets <- d
 
 # for now just concered with text and an id for each tweet
 tweets <- tweets[, c("X", "text")]
-
-
 
 ###### FIND TOP EMOJIS FOR A GIVEN SUBSET OF THE DATA
 # From looking at sample of tweets, emojis display as format -> \U0001f602
@@ -60,20 +58,13 @@ twts$emoji <- sub("/", "", twts$emoji)
 twts <- as_tibble(twts)
 e_twts <- filter(twts, !(twts$emoji == ""))
 
-
 e_twts <- e_twts %>%
   mutate(singl_emoji = strsplit(emoji, "")) %>%
   mutate(num = map_int(singl_emoji, length)) %>%
   unnest()
 e_twts$internal_id <- 1:nrow(e_twts)
 
-
-#################
-### need to try and get either byte or emoji id linked to e_twts's list_o_char
-
-############################################### Not counting some duplicates of emojis #########################
 ## create full tweets by emojis matrix
-
 has_emoji <- vapply(e$bytes, regexpr, FUN.VALUE = integer(nrow(e_twts)),
                     e_twts$singl_emoji, useBytes = T )
 
@@ -95,33 +86,19 @@ result <- merge(e_twts, emoji_ids, by.x = "internal_id", by.y = "row", all.x = T
 colnames(result)[8] <- "emoji_id"
 
 
-final <- result %>%
-  filter(!(is.na(result$col))) %>%
+result <- result %>%
+  filter(!(is.na(result$emoji_id))) %>%
   group_by(X, text, emoji) %>% 
-  nest(col)
+  nest(emoji_id)
 
 
-
-
-
-
-
-###### Would need to regroup or nest() before doing this calc just be 
-######  careful as the nrows of emoj-_twts is unnested form of emojis
-num_twts <- nrow(twts) 
-tweets_w_emojis <- rowSums(emoji_twts[, c(1:842)] > -1)
-num_tweets_w_emojis <- length(tweets_w_emojis[tweets_w_emojis > 0])
-num_emojis <- sum(emoji_c$count)
-
-
-num_twts
-num_tweets_w_emojis
+(num_twts <- nrow(twts) )
+(num_tweets_w_emojis <- nrow(result))
+(num_emojis <- sum(emoji_c$count))
+(num_types_emojis <- nrow(emoji_c))
 round(100 * (num_tweets_w_emojis / num_twts), 1)
-num_emojis
-nrow(emoji_c)
 
 
-  
 #add ranking section later
 # order decscending percentage then do head for top 10
 #emoji_c$rank <- as.numeric(row.names(emoji_c));
@@ -131,7 +108,14 @@ nrow(emoji_c)
 #subset(emojis.count.p, rank <= 10);  
 
 
+
+# merge back with d data cols removed earlier
+final <- merge(result, d, by= 'X', all.x = TRUE)
+final <- subset(final, select=-text.y)
+
+
 # Creating outputs  -------------------------------------------------------
 
+save(final,file="data/processed/extracted_emojis.Rda")
 
 
