@@ -98,14 +98,14 @@ ts <- data.frame(x = as.numeric(wrk_d$place_lon), y = as.numeric(wrk_d$place_lat
 
 ## plot out the usage on world map
 map("world", col="#E8E8E8", fill=TRUE, bg="white", lwd=0.4, interior=TRUE)
-points(points, pch=16, cex=.10, col="red")
+points(ts, pch=16, cex=.10, col="red")
 # appears that few tweets are in Europe and Guam(?) with X, Y or place_lat, place_lon
 
 # plot out the usage on US map
 xlim <- c(-124.738281, -66.601563)
 ylim <- c(24.039321, 50.856229)
 map("world", col="#E8E8E8", fill=TRUE, bg="white", lwd=0.4, xlim=xlim, ylim=ylim, interior=TRUE)
-points(points, pch=16, cex=.10, col="red")
+points(ts, pch=16, cex=.10, col="red")
 map("state", fill=FALSE, bg="white", add = TRUE)
 
 # Creating outputs -------------------------------------------------------
