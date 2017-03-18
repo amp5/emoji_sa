@@ -90,7 +90,7 @@ all(tw_d$X == tw_d$place_lon)
 
 # new dataframe without unecessary cols
 wrk_d <- subset(tw_d, select = c(user_id, id_str, created, text,
-                                lang, verified, place_lat, place_lon ))
+                                 lang, verified, place_lat, place_lon ))
 
 
 ts <- data.frame(x = as.numeric(wrk_d$place_lon), y = as.numeric(wrk_d$place_lat))
