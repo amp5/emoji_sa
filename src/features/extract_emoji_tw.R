@@ -8,7 +8,7 @@
 #             - separate out just tweets and ids then merge back with big tibble at end
 #             - figure out how many unique users and how many tweets after only emoji extracted
 #    Input_files: filtered.csv, full_emoji_db.csv
-#    Output_files: extracted_emojis.Rda
+#    Output_files: extracted_emojis.Rda and emoji_counts.csv
 #    Previous_files: emoji_databases.R and refine_dataset.R
 #    Required by: exploratoy_data_analysis.R
 #    Status: Completed
@@ -117,5 +117,6 @@ final <- subset(final, select=-text.y)
 # Creating outputs  -------------------------------------------------------
 
 save(final,file="data/processed/extracted_emojis.Rda")
+write.csv(emoji_c, "data/interim/emoji_counts.csv")
 
 
