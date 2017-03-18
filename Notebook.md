@@ -2,7 +2,7 @@
   <b>3/14/17 - EDA</b>
 </p>
 
-Focus for now will be EDA - exploratpry data analysis. Below are things that I shoudl answer / visualize:
+Focus for now will be EDA - exploratory data analysis. Below are things that I shoudl answer / visualize:
 - How many tweets have emojis vs not (bar chart)
 - top 10 or 20 most commonly used emojis
 - map tweets with emojis (are any outside US like before?)
@@ -26,6 +26,9 @@ Focus for now will be EDA - exploratpry data analysis. Below are things that I s
 **Reference**
 - Used https://rpubs.com/twgrant/132808 for code to make maps
 - Used https://github.com/today-is-a-good-day/Emoticons/blob/master/postEmoticons.R and http://opiateforthemass.es/articles/emoticons-in-R/ to help match emojis in tweets with correct emoji in dictionary
+
+
+- [ ] Use QGIS to come up with nice maps than R's maps or ggplot
 
 
 <p align="center">
@@ -69,8 +72,8 @@ Still trying to figure out this whole not captured all emojis in a tweet thing. 
 - [x] turn dataframe into tibble
 - [x] remove duplicate tweets
 - [x] check that all code it working (remove save to environment when I close Rstudio)
-- [ ] run emoji extraction again
-- [ ] map emoji only tweets to see location is US only
+- [x] run emoji extraction again
+- [x] map emoji only tweets to see location is US only (smaller num of euro and guam but still there.....)
 
 <p align="center">
   <b>2/26/17 - Identify Emoji Tweets - Continued....</b>
