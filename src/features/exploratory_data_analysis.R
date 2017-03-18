@@ -4,22 +4,19 @@
 #    Date: 03_14_2017
 #    Author: amp5
 #    Purpose: exploratory analysis on data so far
-#    Input_files: extracted_emojis.Rda
-#    Output_files: commonly_used_e.pdf, US_map.pdf
+#    Input_files: extracted_emojis.Rda, emoji_counts.csv
+#    Output_files: commonly_used_e.pdf, US_map.pdf, twts_by_date.pdf, word_cloud.pdf
 #    Previous_files: extract_emoji_tw.R
-#    Required by: TBD
-#    Status: Working on
+#    Required by: TBD (EDA_v2)
+#    Status: Complete
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
 library(tidyverse)
 library(maps)
 library(stringr)
 library(lubridate)
-
-
 library(RColorBrewer)
 library(wordcloud)
-
 library(NLP)
 library(tm)
 
@@ -33,7 +30,6 @@ load(file.choose())
 # emoji_counts.csv
 emoji_typ <- read.csv(file.choose())
 
-
 # Code --------------------------------------------------------------------
 wrk_d <- final
 
@@ -42,7 +38,6 @@ all_twts_num <- c(1816475)
 
 type_o_twt <- c("all", "with_emojis")
 twt_nums <- c(all_twts_num, e_twts_num)
-
 (twt_counts <- data.frame(type_o_twt,  twt_nums))
 
 # Mapping -----------------------------------------------------------------
@@ -66,7 +61,6 @@ title("Presidential Primary Tweets with Emojis, 2016")
 e_typ <- subset(emoji_typ, select=-c(X.1, bytes, rencoding, X))
 e_typ <- e_typ[c(4, 3, 2, 1, 5, 6)]
 e_typ <- as_tibble(e_typ)
-
 e_typ <- e_typ %>%
   mutate(percent = count / e_twts_num)
 
@@ -86,9 +80,7 @@ ggsave("reports/figures/commonly_used_e.pdf")
 # Plot tweets by date:
 twt_date <- as_tibble(table(factor(format(wrk_d$created))))
 names(twt_date) <- c("date", "num")
-
 twt_date$date <- as.Date(mdy(twt_date$date, tz = "America/New_York"))
-
 
 ggplot(twt_date, aes(x=date, y = num)) + 
   geom_line(colour = "#999999") +
@@ -100,8 +92,7 @@ ggplot(twt_date, aes(x=date, y = num)) +
   labs(x = "Date", y = "Count of Tweets")
 ggsave("reports/figures/twts_by_date.pdf")
 
-
-# Word Cloud, cuz why not
+# Word Cloud --------------------------------------------------------------
 tc <- function(filename){
   filename$text <- sapply(filename$text,function(row) iconv(row, "latin1", "ASCII", sub=""))
   TweetCorpus<-paste(unlist(filename$text), collapse =" ")
