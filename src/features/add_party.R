@@ -27,7 +27,7 @@ wrk_d <- select(final, c(X, text.x))
 
 wrk_d <- wrk_d %>%
   mutate(text_only = text.x)
-         
+
 wrk_d$text_only <- sapply(wrk_d$text_only,function(row) iconv(row, "latin1", "ASCII", sub=""))
 
 
@@ -53,7 +53,7 @@ t$Rep <- 0
 t$Rep[grepl("Republican | republican | rep | Rep", t$text_only)] <- 1
 t$Dem <- 0
 t$Dem[grepl("Democrat | democrat | dem | Dem ", t$text_only)] <- 1
-         
+
 t$republican <- with(t, ifelse(t$Rep == 1 | t$DT == 1 | t$TC == 1 | t$MR == 1, 1, 0))
 t$democrat <- with(t, ifelse(t$Dem == 1 | t$HC == 1 | t$BS == 1, 1, 0))
 t$other <- with(t, ifelse(t$republican == 0 & t$democrat == 0, 1, ifelse(t$republican == 1 | t$democrat == 1, 0, "error")))
