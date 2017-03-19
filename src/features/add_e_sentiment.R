@@ -22,3 +22,46 @@ load(file.choose())
 
 # load "Emoji_Sentiment_Data.csv"
 sa <- read.csv(file.choose())
+
+# load full_emoji_db.csv
+e_df <- read.csv(file.choose())
+
+
+# Code --------------------------------------------------------------------
+
+sa$Unicode.name <- tolower(sa$Unicode.name)
+sa <- subset(sa, select = -c(Position, X))
+
+emoji_w_sa <- merge(e_df, sa, by.x = "name", by.y = "Unicode.name", all.x = TRUE) 
+emoji_w_sa <- subset(emoji_w_sa, select = -c(bytes, X, rencoding, Emoji, Unicode.codepoint))
+names(emoji_w_sa) <- c("name", "unicode", "emojiid", "occurances", "neg", "neut", 
+                       "pos", "type", "p_neg", "p_pos", "sentiment_scr")
+
+just_emoji <- subset(only_party, select = c(X, emoji, data))
+unnested <- just_emoji %>%
+  unnest()
+
+unnest_emoji_sa <- as_tibble(merge(unnested, emoji_w_sa, by.x = "emoji_id", 
+                                   by.y = "emojiid", all.x = TRUE))
+emojis_sa <- subset(unnest_emoji_sa, select = c(X, emoji, emoji_id, sentiment_scr))
+
+emojis_sa <- emojis_sa %>%
+  group_by(X, emoji) %>%
+  nest(sentiment_scr)
+
+
+tst <- head(emojis_sa, 50)
+tst <- emojis_sa[28,]
+
+
+tst_ul <- unlist(tst$data)
+tst$sum <- lapply(tst$data[], function(x) sum(x))
+names(tst$sum) <- "sum"
+tst$avg <- as.numeric(as.matrix(tst$sum)) / nchar(tst$emoji)
+
+
+#### giving me what I want for all but a few rows......
+# Outputs -----------------------------------------------------------------
+
+
+
