@@ -10,6 +10,7 @@ load_raw.R
 non_USfiltered.csv
 filtered.csv
 extracted_emojis.Rda
+e_twts_w_affiliation.Rda
 e_twts_w_party.Rda
 Emoji_Sentiment_Data.csv
 Emoji_Sentiment_Data_v1.0.csv
