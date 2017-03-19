@@ -1,4 +1,35 @@
 <p align="center">
+  <b>3/19/17 - Sentiment Analysis Half Done</b>
+</p>
+
+Since the last note I've complted the sentiment analysis for the emojis. The equation I used is on page 15 of https://arxiv.org/pdf/1509.07761.pdf. 
+
+uses Laplace estimation
+p-, p0, p1
+
+negativity = (-1 * p_neg + 1)/(occurances + 3)
+positivity = (p_pos + 1)/(occurances + 3)
+sentiment = positivity + negativity
+
+Next step is to figure out best way to compute sentiment analysis for text.
+
+Considering, (-1 * p_neg)/occurances and  (p_pos)/occurances for text but need to make sure that I can compare two results with one another. 
+
+4 major text lexicons:
+- Bing Liu Opinion
+- MPQA Subjectivity
+- Harvard General Inquire
+- SentiWordNet
+
+This website talking about creating my own lexicon as well as outlines above lexicons: http://sentiment.christopherpotts.net/lexicons.html#mpqa
+
+**Further Study:** Look at the differences between lexicons and compare with emoji sentiments. Also create own lexicon using all 4 of the above. 
+
+**Note:** The emoji part of code only focuses on single character emojis. Not double character emojis. See Novak's Table 7 for refresher. That study also didn't look at double character emojis. 
+
+**Note:** A limitation to add to paper is that the emoji sentiment database from novak calculated sentiment using sometimes very small sample sizes (i.e. n = 5). So that is something to keep in mind. Used Laplace to try to approximate but something worth noting. 
+
+<p align="center">
   <b>3/14/17 - EDA</b>
 </p>
 
