@@ -7,7 +7,7 @@
 #    Input_files: extracted_emojis.Rda, 
 #    Output_files: e_twts_w_affiliation.Rda, e_twts_w_party.Rda
 #    Previous_files: exploratoy_data_analysis.R
-#    Required by: exploratory_data_analysis_v2.R, TBD (adding emoji sentiment src)
+#    Required by: exploratory_data_analysis_v2.R, add_e_sentiment.R
 #    Status: Complete
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################

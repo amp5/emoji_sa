@@ -5,10 +5,10 @@
 #    Author: amp5
 #    Purpose: Adding emoji sentiment score for each emoji
 #    Input_files: extracted_emojis.Rda, Emoji_Sentiment_Data.csv
-#    Output_files: TBD
+#    Output_files: e_twts_w_sa.Rda, sa_etwts.Rda
 #    Previous_files: add_party.R
 #    Required by: TBD
-#    Status: In Progress
+#    Status: Complete
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
 library(tidyverse)
