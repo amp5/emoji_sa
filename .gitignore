@@ -14,3 +14,5 @@ e_twts_w_affiliation.Rda
 e_twts_w_party.Rda
 Emoji_Sentiment_Data.csv
 Emoji_Sentiment_Data_v1.0.csv
+e_twts_w_sa.Rda
+sa_etwts.Rda
