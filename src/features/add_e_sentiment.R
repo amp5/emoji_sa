@@ -52,16 +52,35 @@ emojis_sa <- emojis_sa %>%
 
 tst <- head(emojis_sa, 50)
 tst <- emojis_sa[28,]
+tst <- emojis_sa
 
 
 tst_ul <- unlist(tst$data)
-tst$sum <- lapply(tst$data[], function(x) sum(x))
+tst$sum <- lapply(tst$data[[1]], function(x) sum(x))
 names(tst$sum) <- "sum"
 tst$avg <- as.numeric(as.matrix(tst$sum)) / nchar(tst$emoji)
+
+
+e_party_sa <- merge(only_party, tst, by = "X", all = T)
+e_party_sa <- subset(e_party_sa, select = -c(emoji.y))
+
+names(e_party_sa) <- c("unique_id", "text", "emoji", "unique_e_id_lst", "user_id", "id_str",
+                       "created", "lang", "verified", "place_lat", "place_lon", "text_only",
+                       "hc", "bs", "tc", "dt", "mr", "rep", "dem", "republican", "democrat", 
+                       "other", "sent_list", "sent_sum", "sent_scr")
+
+
+emoji_sa_f <- subset(e_party_sa, select = c(unique_id, text, emoji, created, 
+                                            republican, democrat, other, sent_scr))
+
 
 
 #### giving me what I want for all but a few rows......
 # Outputs -----------------------------------------------------------------
 
+# entire data
+save(e_party_sa,file="data/processed/e_twts_w_sa.Rda")
 
+# data that I'll most likely only use
+save(emoji_sa_f,file="data/processed/sa_etwts.Rda")
 
