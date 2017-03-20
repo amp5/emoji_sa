@@ -35,6 +35,12 @@ Consider using this script to do text analysis: https://github.com/mjhea0/twitte
 
 Look at this for ides on how to visualize my data: http://nl.ijs.si/janes/wp-content/uploads/2016/09/CMC2016_kralj_novak.pdf
 
+
+**Note:** Make sure to talk about the fact that the e_party tweets had different top tens than the e_twts. Obviously the counts are different since the e_party is a subset of e_twts.
+![](https://cloud.githubusercontent.com/assets/5368361/24088173/b874a828-0cfd-11e7-9add-ad779529388a.png)
+![](https://cloud.githubusercontent.com/assets/5368361/24088174/ba2bd07e-0cfd-11e7-9997-b4168dd242e6.png)
+
+
 <p align="center">
   <b>3/14/17 - EDA</b>
 </p>
