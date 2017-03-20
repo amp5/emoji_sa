@@ -16,8 +16,8 @@ Next step is to figure out best way to compute sentiment analysis for text.
 Considering, (-1 * p_neg)/occurances and  (p_pos)/occurances for text but need to make sure that I can compare two results with one another. 
 
 4 major text lexicons:
-- Bing Liu Opinion
-- MPQA Subjectivity
+- Bing Liu Opinion (https://github.com/mjhea0/twitter-sentiment-analysis/tree/master/wordbanks)
+- MPQA Subjectivity (http://mpqa.cs.pitt.edu/lexicons/subj_lexicon/)
 - Harvard General Inquire
 - SentiWordNet
 
@@ -28,6 +28,12 @@ This website talking about creating my own lexicon as well as outlines above lex
 **Note:** The emoji part of code only focuses on single character emojis. Not double character emojis. See Novak's Table 7 for refresher. That study also didn't look at double character emojis. 
 
 **Note:** A limitation to add to paper is that the emoji sentiment database from novak calculated sentiment using sometimes very small sample sizes (i.e. n = 5). So that is something to keep in mind. Used Laplace to try to approximate but something worth noting. 
+
+
+Also, should read: https://people.cs.pitt.edu/~wiebe/pubs/papers/emnlp05polarity.pdf
+Consider using this script to do text analysis: https://github.com/mjhea0/twitter-sentiment-analysis/blob/master/R/sentiment_new.R
+
+Look at this for ides on how to visualize my data: http://nl.ijs.si/janes/wp-content/uploads/2016/09/CMC2016_kralj_novak.pdf
 
 <p align="center">
   <b>3/14/17 - EDA</b>
