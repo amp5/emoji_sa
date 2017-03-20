@@ -1,4 +1,47 @@
 <p align="center">
+  <b>3/19/17 - Sentiment Analysis Half Done</b>
+</p>
+
+Since the last note I've complted the sentiment analysis for the emojis. The equation I used is on page 15 of https://arxiv.org/pdf/1509.07761.pdf. 
+
+uses Laplace estimation
+p-, p0, p1
+
+negativity = (-1 * p_neg + 1)/(occurances + 3)
+positivity = (p_pos + 1)/(occurances + 3)
+sentiment = positivity + negativity
+
+Next step is to figure out best way to compute sentiment analysis for text.
+
+Considering, (-1 * p_neg)/occurances and  (p_pos)/occurances for text but need to make sure that I can compare two results with one another. 
+
+4 major text lexicons:
+- Bing Liu Opinion (https://github.com/mjhea0/twitter-sentiment-analysis/tree/master/wordbanks)
+- MPQA Subjectivity (http://mpqa.cs.pitt.edu/lexicons/subj_lexicon/)
+- Harvard General Inquire
+- SentiWordNet
+
+This website talking about creating my own lexicon as well as outlines above lexicons: http://sentiment.christopherpotts.net/lexicons.html#mpqa
+
+**Further Study:** Look at the differences between lexicons and compare with emoji sentiments. Also create own lexicon using all 4 of the above. 
+
+**Note:** The emoji part of code only focuses on single character emojis. Not double character emojis. See Novak's Table 7 for refresher. That study also didn't look at double character emojis. 
+
+**Note:** A limitation to add to paper is that the emoji sentiment database from novak calculated sentiment using sometimes very small sample sizes (i.e. n = 5). So that is something to keep in mind. Used Laplace to try to approximate but something worth noting. 
+
+
+Also, should read: https://people.cs.pitt.edu/~wiebe/pubs/papers/emnlp05polarity.pdf
+Consider using this script to do text analysis: https://github.com/mjhea0/twitter-sentiment-analysis/blob/master/R/sentiment_new.R
+
+Look at this for ides on how to visualize my data: http://nl.ijs.si/janes/wp-content/uploads/2016/09/CMC2016_kralj_novak.pdf
+
+
+**Note:** Make sure to talk about the fact that the e_party tweets had different top tens than the e_twts. Obviously the counts are different since the e_party is a subset of e_twts.
+![](https://cloud.githubusercontent.com/assets/5368361/24088173/b874a828-0cfd-11e7-9add-ad779529388a.png)
+![](https://cloud.githubusercontent.com/assets/5368361/24088174/ba2bd07e-0cfd-11e7-9997-b4168dd242e6.png)
+
+
+<p align="center">
   <b>3/14/17 - EDA</b>
 </p>
 
