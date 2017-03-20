@@ -16,3 +16,9 @@ library(tidyverse)
 # Setting path and loading files ------------------------------------------
 path <- "/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis" 
 setwd(path)
+
+# entire data e_twts_w_sa.Rda
+# load(file.choose())
+
+# data that I'll most likely only use - sa_etwts.Rda
+load(file.choose())
