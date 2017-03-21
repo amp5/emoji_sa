@@ -1,4 +1,13 @@
 <p align="center">
+  <b>3/21/17 - Sentiment Strategy</b>
+</p>
+
+Spoke with advisor today about how best to compare text and emoji sentiment. As a first run will convert emoji sentiment scores to -1 or 1 based on sign of current score. Then I will look at the various text lexicons and look at their correlations. To do that I will use tidytext https://cran.r-project.org/web/packages/tidytext/vignettes/tidytext.html which has three built in lexicons and maybe add more from list below in these notes. 
+
+Also for graphing my results, I cann't run emojifont https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html using the current version of R on my computer. Instead of risking my code breaking I'll create the graphs first using either the unicode or name of the emoji and then using a school computer which has the most updated R to run emojifonts package and make pretty graphs. The ones I have now are less nice and having to create a legend with the emoji image for every graph is time consuming.
+
+
+<p align="center">
   <b>3/19/17 - Sentiment Analysis Half Done</b>
 </p>
 
