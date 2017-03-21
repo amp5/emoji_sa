@@ -6,6 +6,8 @@ Spoke with advisor today about how best to compare text and emoji sentiment. As 
 
 Also for graphing my results, I cann't run emojifont https://cran.r-project.org/web/packages/emojifont/vignettes/emojifont.html using the current version of R on my computer. Instead of risking my code breaking I'll create the graphs first using either the unicode or name of the emoji and then using a school computer which has the most updated R to run emojifonts package and make pretty graphs. The ones I have now are less nice and having to create a legend with the emoji image for every graph is time consuming.
 
+**Note:** For the end of paper talk about the use case of this analysis esp for the Democratic party and how they have directors of digital media vs how repiblican party spent millions on their social media campaign. (Talk with Elizabeth H. )
+
 
 <p align="center">
   <b>3/19/17 - Sentiment Analysis Half Done</b>
