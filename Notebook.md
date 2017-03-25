@@ -8,6 +8,8 @@ Updated dataset to have both simple {-1,0,1} polartiy for emojis to compare with
 - State in lexicon discussion how I am using polarity detection as a form of sentiment analysis. Not going into much more complicated models at the moment. 
 - Read this paper about lexicons and sentiment analysis http://sentic.net/clsa-model.pdf (secton 10 Polarity Detection)
   - "Polarity detection is the most popular sentiment analysis task. In fact, many research works even use the terms ‘polarity detection’ and ‘sentiment analysis’ interchangeably. This is due to the definition of sentiment analysis as the NLP task that aims to classify a piece of text as positive or negative. As discussed before, however, there are several other tasks that need to be taken into account in order to correctly infer the polarity associated with one or more opinion targets in informal short text. Existing approaches to polarity detection can be grouped into four main categories: keyword spotting, lexical affinity, statistical methods, and concept-level approaches."
+- This article talks about the limitations of the subjectivity lexicon from OpinionFinder in regards to political tweets (http://cs.wellesley.edu/~eni/papers/chung_aaai11.pdf)
+
 
 
 <p align="center">
