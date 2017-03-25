@@ -1,4 +1,16 @@
 <p align="center">
+  <b>3/25/17 - Sentiment Emoji Edit and Sentiment Text Begin</b>
+</p>
+
+Updated dataset to have both simple {-1,0,1} polartiy for emojis to compare with Hu and Liu's similar lexicon for text. Also kept the more robust sentiment scores from emoji sentiment. 
+
+- The simple emoji sa doesn't discern between tweets that have have one happy emoji face and 24 happy emojis. Similar though to how Hu/Liu's calcualtions work. 
+- State in lexicon discussion how I am using polarity detection as a form of sentiment analysis. Not going into much more complicated models at the moment. 
+- Read this paper about lexicons and sentiment analysis http://sentic.net/clsa-model.pdf (secton 10 Polarity Detection)
+  - "Polarity detection is the most popular sentiment analysis task. In fact, many research works even use the terms ‘polarity detection’ and ‘sentiment analysis’ interchangeably. This is due to the definition of sentiment analysis as the NLP task that aims to classify a piece of text as positive or negative. As discussed before, however, there are several other tasks that need to be taken into account in order to correctly infer the polarity associated with one or more opinion targets in informal short text. Existing approaches to polarity detection can be grouped into four main categories: keyword spotting, lexical affinity, statistical methods, and concept-level approaches."
+
+
+<p align="center">
   <b>3/21/17 - Sentiment Strategy</b>
 </p>
 
