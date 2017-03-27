@@ -1,4 +1,13 @@
 <p align="center">
+  <b>3/27/17 - Sentiment Emoji Edit and Sentiment Text Begin</b>
+</p>
+
+**Note** when comparing the simple txt and emoji sentiment analysis, I am only using 24,457 tweets since many tweets had no sentiment for the text as their words were not in bing. By using a more complex lexicon in version 2 we shall see if we can use more tweets than this since there are about 40k tweets with emoji sentiment with them. 
+
+- Removed "trump" from bing dictionary since it was marked as a positive word. Here though it is most likely refering to Donald Trump. As such it was skewing the results of the text analysis since trump was one of the most commonly used words. 
+
+
+<p align="center">
   <b>3/25/17 - Sentiment Emoji Edit and Sentiment Text Begin</b>
 </p>
 
