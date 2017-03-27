@@ -8,7 +8,7 @@
 #    Input_files: extracted_emojis.Rda, Emoji_Sentiment_Data.csv
 #    Output_files: e_twts_w_sa.Rda, sa_etwts.Rda
 #    Previous_files: add_party.R
-#    Required by: TBD
+#    Required by: add_text_sentiment.R
 #    Status: Complete
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################

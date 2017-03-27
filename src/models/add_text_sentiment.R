@@ -5,15 +5,15 @@
 #    Author: amp5
 #    Purpose: conduct sentiment analysis - simple sa
 #    Input_files: sa_etwts.Rda
-#    Output_files: TBD
+#    Output_files: twts_w_e_txt_sa.Rda
 #    Previous_files: add_e_sentiment.R
-#    Required by: TBD
-#    Status: Working on
+#    Required by: simple_results.R
+#    Status: Completed
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
 library(tidyverse)
 library(dplyr)
-library(stringr)
+require(stringr)
 library(tidytext)
 library(wordcloud)
 library(tidyr)
@@ -27,8 +27,7 @@ setwd(path)
 # load sa_etwts.Rda
 load(file.choose())
 
-emoji_sa_f %>%
-  mutate(txt_o = sapply(emoji_sa_f$text,function(row) iconv(row, "latin1", "ASCII", sub=""))) 
+emoji_sa_f$txt_o <-  sapply(emoji_sa_f$text,function(row) iconv(row, "latin1", "ASCII", sub=""))
 
 emoji_sa_f$txt_o <- gsub('http.*\\s*', '', emoji_sa_f$txt_o)
 emoji_sa_f$txt_o <- gsub('&amp;', '', emoji_sa_f$txt_o)
@@ -41,20 +40,11 @@ tidy_twts <- just_text %>%
   unnest_tokens(word, txt_o)
 
 data("stop_words")
-custom_stop_words <- bind_rows(data_frame(word = c("trump"), 
-                                          lexicon = c("custom")), 
-                               stop_words)
-
-custom_stop_words
-
-
-
 cleaned_twts <- tidy_twts %>%
-  anti_join(custom_stop_words)
+  anti_join(stop_words)
 
 cleaned_twts %>%
   count(word, sort = TRUE) 
-
 
 bing <- get_sentiments("bing")
 # removing trump from lexicon - used as a positive sentiment
@@ -81,12 +71,9 @@ bing_word_c %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   ylab("Contribution to sentiment")
 
-
 cleaned_twts %>%
   count(word) %>%
-  with(wordcloud(word, n, max.words = 100))
-
-
+  with(wordcloud(word, n, max.words = 200))
 
 cleaned_twts %>%
   inner_join(bing) %>%
@@ -96,7 +83,6 @@ cleaned_twts %>%
                    max.words = 200)
 
 tidy_twts
-
 
 bing_word_c %>%
   group_by(sentiment) %>%
@@ -108,22 +94,33 @@ bing_word_c %>%
        x = NULL) +
   coord_flip()
 
-
 sent_scrs <- tidy_twts %>%
   inner_join(bing)
 
-sent_scrs$score <- ifelse(sent_scrs$sentiment == "positive", 1, 
-                          ifelse(sent_scrs$sentiment == "negative", -1, 0))
-  
+all_t_sa <- merge(tidy_twts, bing, by = "word")
+all_t_sa$score <- ifelse(all_t_sa$sentiment == "positive", 1, ifelse(all_t_sa$sentiment == "negative", -1, 0))
 
+all_sa_nest <- all_t_sa %>%
+  group_by(unique_id) %>%
+  nest(score)
 
+all_sa_nest$sum_txt <- lapply(all_sa_nest$data, function(x) {
+  x$sum_txt <- colSums(x, na.rm=T)
+})
 
+simple_sa <- merge(emoji_sa_f, all_sa_nest, by = "unique_id", all.x = TRUE)
 
+table(is.na(simple_sa$sum_txt))
 
-# Not working below…. -----------------------------------------------------
-tidy_tweets <- as_tibble(tidy_twts)
-sent_scores <- as_tibble(sent_scrs)
+# FALSE  TRUE 
+# 24457 17377 
 
-all_t_sa <- merge(tidy_tweets, sent_scrs, by = word, all.x = TRUE)
+simple_sa$char_n <- sapply(gregexpr("[A-z]\\W", simple_sa$txt_o), length)
 
-all_t_sa <- left_join(tidy_tweets, sent_scrs, by = word)
+final_txt_sa <- filter(simple_sa, !is.na(sum_txt))
+final_txt_sa$txt_sent_scr <- as.numeric(final_txt_sa$sum_txt)/as.numeric(final_txt_sa$char_n)
+
+# Output ------------------------------------------------------------------
+
+save(final_txt_sa,file="data/processed/twts_w_e_txt_sa.Rda")
+
