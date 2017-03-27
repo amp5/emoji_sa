@@ -118,6 +118,26 @@ ggplot(final_s_date_dt, aes(x = created, y = txt_sent_scr, color = party)) +
   ggtitle("Sentiment of Text Over Time by Political Reference", subtitle = "n = 24,457")
 
 
+ggplot(final_simple, aes(x = sent_simple, fill = party)) +
+  geom_histogram(binwidth = 0.5)  +
+  scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
+  theme_minimal() +
+  labs(x = "Emoji Sentiment") +
+  facet_wrap(~party, ncol = 2) +
+  ggtitle("Emoji Sentiment Score Distribution", subtitle = "n = 24,457")
+
+
+ggplot(final_simple, aes(x = txt_sent_scr, fill = party)) +
+  geom_histogram(binwidth = 0.5)  +
+  scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
+  theme_minimal() +
+  labs(x = "Text Sentiment") +
+  facet_wrap(~party, ncol = 2) +
+  ggtitle("Text Sentiment Score Distribution", subtitle = "n = 24,457")
+
+
+
+
 
 
 
