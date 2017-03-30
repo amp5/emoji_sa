@@ -8,7 +8,7 @@
 #    Output_files: TBD
 #    Previous_files: add_text_sentiment.R
 #    Required by: TBD
-#    Status: Working on
+#    Status: Completed
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
 library(tidyverse)
