@@ -46,83 +46,77 @@ cleaned_twts <- tidy_twts %>%
 cleaned_twts %>%
   count(word, sort = TRUE) 
 
-bing <- get_sentiments("bing")
-nrc <- get_sentiments("nrc")
 afinn <- get_sentiments("afinn")
-# removing trump from lexicon - used as a positive sentiment
-# bing <- bing[-6177, ] 
-twtsentiment <- cleaned_twts %>%
+# this lexicon did not have trump as term
+twtsentiment_a <- cleaned_twts %>%
   inner_join(afinn) %>%
-  count(word, index = unique_id %/% 80, sentiment) %>%
-  spread(sentiment, n, fill = 0) %>%
-  mutate(sentiment = positive - negative)
+  count(word, index = unique_id %/% 80, score) %>%
+  spread(sentiment, n, fill = 0)
 
-bing_word_c <- cleaned_twts %>%
-  inner_join(nrc) %>%
-  count(word, sentiment, sort = TRUE) %>%
+afinn_word_c <- cleaned_twts %>%
+  inner_join(afinn) %>%
+  count(word, score, sort = TRUE) %>%
   ungroup()
 
-bing_word_c
-
-bing_word_c %>%
+afinn_word_c
+ 
+afinn_word_c %>%
   filter(n > 200) %>%
-  mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
-  mutate(word = reorder(word, n)) %>%
-  ggplot(aes(word, n, fill = sentiment)) +
+  mutate(word = reorder(word, score)) %>%
+  mutate(polarity = ifelse(score > 0, "Positive", "Negative")) %>%
+  ggplot(aes(word, score, fill = polarity)) +
   geom_bar(stat = "identity") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  ylab("Contribution to sentiment")
+  ylab("Contribution to sentiment") +
+  ggtitle("Afin Lexicon") 
 
 cleaned_twts %>%
   count(word) %>%
   with(wordcloud(word, n, max.words = 200))
 
+# Not very helpful as a visualization
 cleaned_twts %>%
-  inner_join(nrc) %>%
-  count(word, sentiment, sort = TRUE) %>%
-  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+  inner_join(afinn) %>%
+  count(word, score, sort = TRUE) %>%
+  mutate(polarity = ifelse(score > 0, "Positive", "Negative")) %>%
+  acast(word ~ polarity, value.var = "n", fill = 0) %>%
   comparison.cloud(colors = c("#F8766D", "#00BFC4"),
                    max.words = 200)
 
-tidy_twts
-
-bing_word_c %>%
-  group_by(sentiment) %>%
-  top_n(10) %>%
-  ggplot(aes(reorder(word, n), n, fill = sentiment)) +
+afinn_word_c %>%
+  mutate(polarity = ifelse(score > 0, "Positive", "Negative")) %>%
+  group_by(polarity) %>%
+  top_n(10, n) %>%
+  ggplot(aes(reorder(word, n), n, fill = polarity)) +
   geom_col(show.legend = FALSE) +
-  facet_wrap(~sentiment, scales = "free_y") +
+  facet_wrap(~polarity, scales = "free_y") +
   labs(y = "Contribution to sentiment",
        x = NULL) +
-  coord_flip()
+  coord_flip() +
+  ggtitle("Afin Lexicon")
 
-sent_scrs <- tidy_twts %>%
-  inner_join(nrc)
+all_t_sa_a <- merge(tidy_twts, afinn, by = "word")
+all_t_sa_a$polarity <- ifelse(all_t_sa_a$score > 0, "positive", "negative")
 
-all_t_sa <- merge(tidy_twts, nrc, by = "word")
-all_t_sa$score <- ifelse(all_t_sa$sentiment == "positive", 1, ifelse(all_t_sa$sentiment == "negative", -1, 0))
-
-all_sa_nest <- all_t_sa %>%
+all_sa_nest_a <- all_t_sa_a %>%
   group_by(unique_id) %>%
   nest(score)
 
-all_sa_nest$sum_txt <- lapply(all_sa_nest$data, function(x) {
+all_sa_nest_a$sum_txt <- lapply(all_sa_nest_a$data, function(x) {
   x$sum_txt <- colSums(x, na.rm=T)
 })
 
-simple_sa <- merge(emoji_sa_f, all_sa_nest, by = "unique_id", all.x = TRUE)
-
-table(is.na(simple_sa$sum_txt))
+robust_sa <- merge(emoji_sa_f, all_sa_nest_a, by = "unique_id", all.x = TRUE)
+table(is.na(robust_sa$sum_txt))
 
 # FALSE  TRUE 
-# 24457 17377 
+# 26026 15808 
 
-simple_sa$char_n <- sapply(gregexpr("[A-z]\\W", simple_sa$txt_o), length)
-
-final_txt_sa <- filter(simple_sa, !is.na(sum_txt))
-final_txt_sa$txt_sent_scr <- as.numeric(final_txt_sa$sum_txt)/as.numeric(final_txt_sa$char_n)
+robust_sa$char_n <- sapply(gregexpr("[A-z]\\W", robust_sa$txt_o), length)
+final_txt_sa_r <- filter(robust_sa, !is.na(sum_txt))
+final_txt_sa_r$txt_sent_scr <- as.numeric(final_txt_sa_r$sum_txt)/as.numeric(final_txt_sa_r$char_n)
 
 # Output ------------------------------------------------------------------
 
-save(final_txt_sa,file="data/processed/twts_w_e_txt_sa.Rda")
+save(final_txt_sa_r,file="data/processed/robust_sa.Rda")
 
