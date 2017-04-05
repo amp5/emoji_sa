@@ -1,4 +1,13 @@
 <p align="center">
+  <b>3/30/17 - Robust Sentiment Thoughts</b>
+</p>
+
+Considering using afinn lexicon for text as bing's was not granular enough. 
+**Reference:** Afinn's citation -> http://www2.imm.dtu.dk/pubdb/views/publication_details.php?id=6010
+
+Also wondering whther it would be worth it at this point to properly attempt to classify my tweets into political parties. If so could use Quanteda library https://cran.r-project.org/web/packages/quanteda/vignettes/quickstart.html
+
+<p align="center">
   <b>3/27/17 - Sentiment Emoji Edit and Sentiment Text Begin</b>
 </p>
 
