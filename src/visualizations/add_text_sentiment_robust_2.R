@@ -1,9 +1,9 @@
 #########################################################################
-#    File_name: add_text_sentiment_robust.R
+#    File_name: add_text_sentiment_robust_2.R
 #    Version: R version 3.2.4 (2016-03-10)
-#    Date: 03_29_2017
+#    Date: 04_03_2017
 #    Author: amp5
-#    Purpose: conduct sentiment analysis - robust sa
+#    Purpose: conduct sentiment analysis - robust sa with tf-idf
 #    Input_files: sa_etwts.Rda
 #    Output_files: twts_w_e_txt_sa.Rda
 #    Previous_files: add_e_sentiment.R
@@ -33,11 +33,25 @@ emoji_sa_f$txt_o <- gsub('http.*\\s*', '', emoji_sa_f$txt_o)
 emoji_sa_f$txt_o <- gsub('&amp;', '', emoji_sa_f$txt_o)
 emoji_sa_f$txt_o <- gsub('[@!#$%^&*()|_+=:?.,;]', '', emoji_sa_f$txt_o)
 
-just_text <- select(emoji_sa_f, c(unique_id, txt_o))
+just_text <- select(emoji_sa_f, c(unique_id, txt_o, republican, democrat))
 just_text <- as_tibble(just_text)
 
-tidy_twts <- just_text %>%
-  unnest_tokens(word, txt_o)
+just_text$republican <- ifelse(just_text$republican == 1, "rep", "")
+just_text$democrat <- ifelse(just_text$democrat == 1, "dem", "")
+
+just_text$party <- paste(just_text$republican, just_text$democrat)
+just_text$party <- ifelse(just_text$party == "rep dem", "both", just_text$party)
+
+
+txt_party <- select(just_text, c(unique_id, txt_o, party))
+
+# j_txt <- select(txt_party, -party)
+# j_txt$group <- "all"
+
+
+tidy_twts <- txt_party %>%
+  unnest_tokens(word, txt_o, token = "ngrams", n = 2)
+
 
 data("stop_words")
 cleaned_twts <- tidy_twts %>%
@@ -45,6 +59,59 @@ cleaned_twts <- tidy_twts %>%
 
 cleaned_twts %>%
   count(word, sort = TRUE) 
+
+afinn_word_c <- cleaned_twts %>%
+  inner_join(afinn) %>%
+  count(word, new, sort = TRUE) %>%
+  ungroup()
+
+# removing stop words doesn't work here since we've first created bigrams
+# also can't add scores since we'd have to hand code sentiment for earch bi-gram
+
+
+# For tf-idf - keep in all words, don't remove stop words
+tidy_twts2 <- txt_party %>%
+  unnest_tokens(word, txt_o) %>%
+  count(party, word, sort = TRUE) 
+
+total_words_twt <- tidy_twts2 %>% group_by(party) %>% summarize(total = sum(n))
+tidy_twts2 <- left_join(tidy_twts2, total_words_twt)
+tidy_twts2
+
+
+
+twt_words <- tidy_twts2 %>%
+  bind_tf_idf(word, party, n)
+
+twt_words %>%
+  select(-c(total)) %>%
+  arrange(desc(tf_idf))
+
+
+
+
+
+
+reordered <- twt_words %>%
+  select(-total) %>%
+  arrange(desc(tf_idf))
+
+reordered %>%
+  top_n(5, tf_idf) %>%
+  ggplot(aes(reorder(word,tf_idf), tf_idf, fill = party)) +
+  geom_col() +
+ # scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ylab("Weighted Frequency (tf_idf) ") +
+  xlab("Top Words") +
+# facet_wrap(~party, scales = "free_y") +
+  ggtitle("Top Weighted Frequency of Words") 
+
+
+
+# Stopped Here - Need to Re-Think -----------------------------------------
+
+
 
 afinn <- get_sentiments("afinn")
 afinn$new <- afinn$score/5
@@ -55,35 +122,14 @@ afinn$new <- afinn$score/5
 #   count(word, index = unique_id %/% 80, new) %>%
 #   spread(sentiment, n, fill = 0)
 
-afinn_word_c <- cleaned_twts %>%
+afinn_word_c <- twt_words %>%
   inner_join(afinn) %>%
   count(word, new, sort = TRUE) %>%
   ungroup()
 
-afinn_word_c
- 
-afinn_word_c %>%
-  filter(n > 200) %>%
-  mutate(word = reorder(word, new)) %>%
-  mutate(polarity = ifelse(new > 0, "Positive", "Negative")) %>%
-  ggplot(aes(word, new, fill = polarity)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  ylab("Contribution to sentiment") +
-  ggtitle("Afinn Lexicon") 
+afinn_w_weight <- merge(afinn_word_c, twt_words, by)
 
-cleaned_twts %>%
-  count(word) %>%
-  with(wordcloud(word, n, max.words = 200))
 
-# Not very helpful as a visualization
-cleaned_twts %>%
-  inner_join(afinn) %>%
-  count(word, new, sort = TRUE) %>%
-  mutate(polarity = ifelse(score > 0, "Positive", "Negative")) %>%
-  acast(word ~ polarity, value.var = "n", fill = 0) %>%
-  comparison.cloud(colors = c("#F8766D", "#00BFC4"),
-                   max.words = 200)
 
 afinn_word_c %>%
   mutate(polarity = ifelse(new > 0, "Positive", "Negative")) %>%
@@ -121,4 +167,4 @@ final_txt_sa_r$txt_sent_scr <- as.numeric(final_txt_sa_r$sum_txt)/as.numeric(fin
 # Output ------------------------------------------------------------------
 
 save(final_txt_sa_r,file="data/processed/robust_sa.Rda")
- 
+

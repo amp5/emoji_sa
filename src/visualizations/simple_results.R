@@ -138,6 +138,24 @@ ggplot(final_simple, aes(x = txt_sent_scr, fill = party)) +
 
 
 
+sent_matrix <- final_simple[c("sent_simple", "txt_sent_scr")]
 
+
+
+cor(sent_matrix, method="pearson")
+
+# sent_simple txt_sent_scr
+# sent_simple    1.0000000    0.1108939
+# txt_sent_scr   0.1108939    1.0000000
+
+
+
+ggplot(sent_matrix, aes(x = sent_simple, y = txt_sent_scr)) +
+  geom_point() +
+  scale_color_manual(values=c("#9999CC", "#56B4E9", "#CC6666")) +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(x = "Emoji Sentiment", y = " Text Sentiment") +
+  ggtitle("Sentiment of Emoji by Text", subtitle = "n = 24,457")
 
 
