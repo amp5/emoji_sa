@@ -31,7 +31,7 @@ load(file.choose())
 all_twts <- read.csv(file.choose())
 
 # emoji_counts.csv
-emoji_typ <- read.csv(file.choose())
+#emoji_typ <- read.csv(file.choose())
 
 # emoji_counts_v2.csv
 emoji_typ2 <- read.csv(file.choose())
@@ -73,12 +73,10 @@ e_polarities <- rbind(e_p, e_n)
 e_polarities %>%
   ggplot(mapping = aes(x = reorder(name, percent), y = percent, fill = polarity)) +
   geom_col(show.legend = FALSE) +
+  geom_text(aes(label=round(percent, digits = 2), y =mean(range(percent)))) +
   coord_flip() +
   theme_minimal() +
   facet_wrap(~polarity, scales = "free_y") +
-  ggtitle("Top 10 Used Emojis in Tweets with Party Affiliation") +
+  # ggtitle("Top 10 Used Emojis in Tweets with Party Affiliation") +
   labs(x = "Emoji Names", y = "Percent (%)") 
-
-
-
 

@@ -32,24 +32,36 @@ load(file.choose())
 # save all e tweets with new var -> EDA show many tweets are dem, rep and other in bar chart
 all <- subset(w_affil, select = c(X, republican, democrat, other))
 
-(repub <- c(nrow(filter(all, all$republican == 1))))
-(demo <- c(nrow(filter(all, all$democrat == 1))))
-(other <- c(nrow(filter(all, all$other == 1))))
+all$rep <- ifelse(all$republican == 1, "rep", "")
+all$dem <- ifelse(all$democrat == 1, "dem", "")
 
-party <- c("republican", "democrat", "other")
-counts <- c(repub, demo, other)
+all$party <- paste(all$rep, all$dem)
+all$party <- ifelse(all$party == "rep dem", "both", all$party)
+all$party <- ifelse(all$other == 1, "other", all$party)
+
+
+(repub <- c(nrow(filter(all, all$party == "rep "))))
+(demo <- c(nrow(filter(all, all$party == " dem"))))
+(both <- c(nrow(filter(all, all$party == "both"))))
+(other <- c(nrow(filter(all, all$party == "other"))))
+
+party <- c("Republican", "Democrat", "Both", "Other")
+counts <- c(repub, demo, both, other)
 
 by_party <- as_tibble(data.frame(party, counts))
 
 (total_w_affil <- nrow(all))
 
-ggplot(data=by_party, aes(x = reorder(party,counts), y= counts / total_w_affil)) +
+ggplot(data=by_party, aes(x = reorder(party,counts), y= counts / total_w_affil, fill = party)) +
   geom_bar(stat="identity") +
+  scale_fill_manual(values=c("#9999CC", "#56B4E9", "#999999", "#CC6666")) +
   theme_minimal() +
   ggtitle("Emoji Tweets by Party Reference") +
-  labs(x = "Party Reference", y = "Percent (%)")
+  labs(x = "Party Reference", y = "Percent (%)") 
 ggsave("reports/figures/all_party_ref.pdf")
 
+
+by_party$percent <- by_party$counts/total_w_affil
 
 # save only e_party tweets -> show distribution of e_twts by party - location wise 
 wrk_d <- subset(only_party, select = c(X, republican, democrat, place_lat, place_lon))

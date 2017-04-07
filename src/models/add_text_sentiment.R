@@ -84,11 +84,14 @@ cleaned_twts %>%
 
 tidy_twts
 
+ttl <- nrow(bing_word_c)
+
 bing_word_c %>%
   group_by(sentiment) %>%
   top_n(10) %>%
-  ggplot(aes(reorder(word, n), n, fill = sentiment)) +
+  ggplot(aes(reorder(word, n), n/ttl, fill = sentiment)) +
   geom_col(show.legend = FALSE) +
+  geom_text(aes(label=round(n/ttl, digits = 2), y =mean(range(n/ttl)))) +
   facet_wrap(~sentiment, scales = "free_y") +
   labs(y = "Contribution to sentiment",
        x = NULL) +
