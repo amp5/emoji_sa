@@ -85,17 +85,21 @@ cleaned_twts %>%
   comparison.cloud(colors = c("#F8766D", "#00BFC4"),
                    max.words = 200)
 
+ttl <- nrow(final_txt_sa_r)
+
 afinn_word_c %>%
   mutate(polarity = ifelse(new > 0, "Positive", "Negative")) %>%
   group_by(polarity) %>%
   top_n(10, n) %>%
-  ggplot(aes(reorder(word, n), n, fill = polarity)) +
+  ggplot(aes(reorder(word, n), n/ttl, fill = polarity)) +
   geom_col(show.legend = FALSE) +
+  geom_text(aes(label=round(n/ttl, digits = 2), y =mean(range(n/ttl)))) +
   facet_wrap(~polarity, scales = "free_y") +
   labs(y = "Contribution to sentiment",
        x = NULL) +
-  coord_flip() +
-  ggtitle("Afinn Lexicon")
+  coord_flip() 
+
+
 
 all_t_sa_a <- merge(tidy_twts, afinn, by = "word")
 all_t_sa_a$polarity <- ifelse(all_t_sa_a$new > 0, "positive", "negative")

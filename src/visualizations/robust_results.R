@@ -71,21 +71,6 @@ final_s_date_d$created <- as.Date(mdy(final_s_date_d$created, tz = "America/New_
 final_s_date_d$party_f <-factor(final_s_date_d$party, levels = c("dem", "both", "rep")) 
 
 
-ggplot(final_s_date_d, aes(x = created, y = sent_robust, color = party)) +
-  geom_point() +
-  scale_color_manual(values=c("#9999CC", "#56B4E9", "#CC6666")) +
-  geom_smooth(method = "lm", se = TRUE) +
-  theme_minimal() +
-  theme(axis.text.x=element_text(angle=90)) +
-  scale_x_date(date_breaks = ("5 day"), date_labels = "%b %d") +
-  labs(x = "Date", y = "Average Emoji Sentiment") +
-  facet_wrap(~party_f, ncol = 2) +
-  ggtitle("Robust Sentiment of Emoji Over Time by Political Reference", subtitle = "n = 26,026")
-
-
-
-
-
 final_demt <- filter(final_robust, final_robust$party == " dem")
 final_demt <- select(final_demt, c(created, txt_sent_scr))
 final_dem_datet <-  aggregate(. ~ created, final_demt, mean)
@@ -105,58 +90,85 @@ final_s_date_dt <- rbind(final_both_datet, final_dem_datet, final_rep_datet)
 final_s_date_dt$created <- as.Date(mdy(final_s_date_dt$created, tz = "America/New_York"))
 final_s_date_dt$party_f <-factor(final_s_date_dt$party, levels = c("dem", "both", "rep")) 
 
+final_s_date_d$type <- "emoji"
+colnames(final_s_date_d)[2] <- "score"
 
-ggplot(final_s_date_dt, aes(x = created, y = txt_sent_scr, color = party)) +
+final_s_date_dt$type <- "text" 
+colnames(final_s_date_dt)[2]<- "score"
+
+o_t <- rbind(final_s_date_d, final_s_date_dt)
+o_t$party <- NULL
+colnames(o_t)[3] <- "party"
+
+ggplot(o_t, aes(x = created, y = score, color = party, shape = type)) +
   geom_point() +
-  scale_color_manual(values=c("#9999CC", "#56B4E9", "#CC6666")) +
+  geom_point() +
+  scale_color_manual(values=c("#56B4E9", "#9999CC", "#CC6666"), labels = c("Democrat", "Both", "Republican")) +
   geom_smooth(method = "lm", se = TRUE) +
   theme_minimal() +
   theme(axis.text.x=element_text(angle=90)) +
   scale_x_date(date_breaks = ("5 day"), date_labels = "%b %d") +
   labs(x = "Date", y = "Average Emoji Sentiment") +
-  facet_wrap(~party_f, ncol = 2) +
-  ggtitle("Robust Sentiment of Text Over Time by Political Reference", subtitle = "n = 26,026")
+  facet_grid(party ~ type) +
+  ggtitle(" ", subtitle = "n = 26,026")
 
 
-ggplot(final_robust, aes(x = sent_robust, fill = party)) +
+
+
+txt <- subset(final_robust, select = c(party, txt_sent_scr))
+colnames(txt)[2] <- "score"
+txt$type <- "text"
+
+emoji <- subset(final_robust, select = c(party, sent_robust))
+colnames(emoji)[2] <- "score"
+emoji$type <- "emoji"
+
+total <- nrow(final_simple)
+
+hist_both <- rbind(txt, emoji)
+hist_both$percent <- hist_both$score/total
+
+
+
+
+
+
+ggplot(hist_both, aes(x = score, fill = party)) +
   geom_histogram(binwidth = 0.1)  +
   scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
   theme_minimal() +
+  geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
   labs(x = "Emoji Sentiment") +
-  facet_wrap(~party, ncol = 2) +
-  ggtitle("Robust Emoji Sentiment Score Distribution", subtitle = "n = 26,026")
+  facet_grid(party ~ type) +
+  theme(legend.position="none") +
+  ggtitle(" ", subtitle = "n = 26,026")
 
 
-ggplot(final_robust, aes(x = txt_sent_scr, fill = party)) +
-  geom_histogram(binwidth = 0.1)  +
+
+ggplot(data = hist_both, aes(x = type, y = score)) + 
+  geom_boxplot(aes(fill=party), outlier.alpha = 0.1) +
   scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
   theme_minimal() +
-  labs(x = "Text Sentiment") +
-  facet_wrap(~party, ncol = 2) +
-  ggtitle("Robust Text Sentiment Score Distribution", subtitle = "n = 26,026")
-
-
+  labs(x = "Character Type", y = "Score") +
+  facet_grid( ~ party) +
+  ggtitle(" ", subtitle = "n = 26,026")
 
 
 sent_matrix <- final_robust[c("sent_robust", "txt_sent_scr")]
-
-
-
 cor(sent_matrix, method="pearson")
 
 # sent_robust txt_sent_scr
 # sent_robust     1.000000     0.182874
 # txt_sent_scr    0.182874     1.000000
 
-
-
 ggplot(sent_matrix, aes(x = sent_robust, y = txt_sent_scr)) +
   geom_point() +
-  scale_color_manual(values=c("#9999CC", "#56B4E9", "#CC6666")) +
+  geom_count() +
   geom_smooth(method = "lm") +
+  geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
   theme_minimal() +
   labs(x = "Emoji Sentiment", y = " Text Sentiment") +
-  ggtitle("Robust Sentiment of Emoji by Text", subtitle = "n = 24,457")
+  ggtitle(cor(sent_matrix, method="pearson")[2], subtitle = "n = 26,026")
  
 
 
