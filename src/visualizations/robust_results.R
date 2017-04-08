@@ -123,13 +123,10 @@ emoji <- subset(final_robust, select = c(party, sent_robust))
 colnames(emoji)[2] <- "score"
 emoji$type <- "emoji"
 
-total <- nrow(final_simple)
+total <- nrow(final_robust)
 
 hist_both <- rbind(txt, emoji)
 hist_both$percent <- hist_both$score/total
-
-
-
 
 
 
@@ -142,6 +139,18 @@ ggplot(hist_both, aes(x = score, fill = party)) +
   facet_grid(party ~ type) +
   theme(legend.position="none") +
   ggtitle(" ", subtitle = "n = 26,026")
+
+
+hist_both$polarity <- ifelse(hist_both$score > 0, "pos", 
+                             ifelse(hist_both$score == 0, "neut", 
+                                    ifelse(hist_both$score < 0, "neg", 0)))
+p_n_n <- subset(hist_both, select = c(score, party, type, polarity))
+
+tbl <- aggregate(score ~ type + party + polarity, p_n_n, length)
+tbl$percent <- tbl$score / total
+
+tbl_a <- aggregate(score ~ type + polarity, p_n_n, length)
+tbl_a$percent <- tbl_a$score / total
 
 
 

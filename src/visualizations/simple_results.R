@@ -30,27 +30,6 @@ final_simple$democrat <- ifelse(final_simple$democrat == 1, "dem", "")
 final_simple$party <- paste(final_simple$republican, final_simple$democrat)
 final_simple$party <- ifelse(final_simple$party == "rep dem", "both", final_simple$party)
 
-
-ggplot(final_simple, aes(x = txt_sent_scr, y = sent_simple)) +
-  geom_point() +
-  geom_count() +
-  theme_minimal() +
-  geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
-  labs(x = "text sentiment", y = "emoji sentiment") +
-  ggtitle("Sentiment of Emoji vs. Text", subtitle = "n = 24,457")
-
-ggplot(final_simple, aes(x = txt_sent_scr, y = sent_simple, color = party)) +
-  geom_point() +
-  scale_color_manual(values=c("#56B4E9", "#9999CC", "#CC6666")) +
-  geom_count() +
-  theme_minimal() +
-  geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
-  labs(x = "text sentiment", y = "emoji sentiment") +
-  facet_wrap(~party, ncol = 2) +
-  ggtitle("Sentiment of Emoji vs. Text by Political Reference", subtitle = "n = 24,457")
-
-
-
 final_dem <- filter(final_simple, final_simple$party == " dem")
 final_dem <- select(final_dem, c(created, sent_simple))
 final_dem_date <-  aggregate(. ~ created, final_dem, mean)
@@ -136,6 +115,7 @@ hist_both$percent <- hist_both$score/total
 ggplot(hist_both, aes(x = score, fill = party)) +
   geom_histogram(binwidth = 0.2)  +
   scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
+  stat_function(fun=dnorm, args=list(mean=mean(hist_both$score), sd=sd(hist_both$score))) +
   theme_minimal() +
   geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
   labs(x = "Emoji Sentiment") +
@@ -143,7 +123,17 @@ ggplot(hist_both, aes(x = score, fill = party)) +
   theme(legend.position="none") +
   ggtitle(" ", subtitle = "n = 24,457")
   
+hist_both$polarity <- ifelse(hist_both$score > 0, "pos", 
+                        ifelse(hist_both$score == 0, "neut", 
+                               ifelse(hist_both$score < 0, "neg", 0)))
+p_n_n <- subset(hist_both, select = c(score, party, type, polarity))
+
+tbl <- aggregate(score ~ type + party + polarity, p_n_n, length)
+tbl$percent <- tbl$score / total
   
+tbl_a <- aggregate(score ~ type + polarity, p_n_n, length)
+tbl_a$percent <- tbl_a$score / total
+
 
 ggplot(data = hist_both, aes(x = type, y = score)) + 
   geom_boxplot(aes(fill=party), outlier.alpha = 0.2) +
