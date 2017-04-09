@@ -152,6 +152,9 @@ tbl$percent <- tbl$score / total
 tbl_a <- aggregate(score ~ type + polarity, p_n_n, length)
 tbl_a$percent <- tbl_a$score / total
 
+tbl_p <- aggregate(score ~ polarity + party, p_n_n, length)
+tbl_p$percent <- tbl_p$score / total
+
 
 
 ggplot(data = hist_both, aes(x = type, y = score)) + 
