@@ -70,6 +70,42 @@ afinn_word_c <- cleaned_twts %>%
 
 
 # For tf-idf - keep in all words, don't remove stop words
+
+
+# attempt 1 ---------------------------------------------------------------
+
+tidy_twts2 <- txt_party %>%
+  unnest_tokens(word, txt_o) %>%
+  count(unique_id, word, sort = TRUE) 
+
+total_words_twt <- tidy_twts2 %>% group_by(unique_id) %>% summarize(total = sum(n))
+tidy_twts2 <- left_join(tidy_twts2, total_words_twt)
+tidy_twts2
+
+twt_words <- tidy_twts2 %>%
+  bind_tf_idf(word, unique_id, n)
+
+twt_words %>%
+  select(-c(total)) %>%
+  arrange(desc(tf_idf))
+# attempt 2 ---------------------------------------------------------------
+
+
+tidy_twts2 <- txt_party %>%
+  unnest_tokens(word, txt_o) %>%
+  count(unique_id, word, sort = TRUE) 
+
+total_words_twt <- tidy_twts2 %>% group_by(party) %>% summarize(total = sum(n))
+tidy_twts2 <- left_join(tidy_twts2, total_words_twt)
+tidy_twts2
+
+twt_words <- tidy_twts2 %>%
+  bind_tf_idf(word, party, n)
+
+
+
+
+# attempt 3 ---------------------------------------------------------------
 tidy_twts2 <- txt_party %>%
   unnest_tokens(word, txt_o) %>%
   count(party, word, sort = TRUE) 
@@ -77,7 +113,6 @@ tidy_twts2 <- txt_party %>%
 total_words_twt <- tidy_twts2 %>% group_by(party) %>% summarize(total = sum(n))
 tidy_twts2 <- left_join(tidy_twts2, total_words_twt)
 tidy_twts2
-
 
 
 twt_words <- tidy_twts2 %>%
@@ -100,12 +135,10 @@ reordered %>%
   top_n(5, tf_idf) %>%
   ggplot(aes(reorder(word,tf_idf), tf_idf, fill = party)) +
   geom_col() +
- # scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
+ scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   ylab("Weighted Frequency (tf_idf) ") +
-  xlab("Top Words") +
-# facet_wrap(~party, scales = "free_y") +
-  ggtitle("Top Weighted Frequency of Words") 
+  xlab("Top Words") 
 
 
 
