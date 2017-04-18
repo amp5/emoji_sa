@@ -13,6 +13,7 @@
 #########################################################################
 library(tidyverse)
 library(lubridate)
+library(gmodels)
 
 
 # Setting path and loading files ------------------------------------------
@@ -185,5 +186,15 @@ ggplot(sent_matrix, aes(x = sent_robust, y = txt_sent_scr)) +
 
 
 
+sent_matrix$emoji_scr <- ifelse(sent_matrix$sent_robust > 0, "pos", 
+                                ifelse(sent_matrix$sent_robust == 0, "neu", 
+                                       ifelse(sent_matrix$sent_robust < 0, "neg", "error")))
 
+
+sent_matrix$txt_scr <- ifelse(sent_matrix$txt_sent_scr > 0, "pos", 
+                                ifelse(sent_matrix$txt_sent_scr == 0, "neu", 
+                                       ifelse(sent_matrix$txt_sent_scr < 0, "neg", "error")))
+
+
+percentages <- subset(sent_matrix, select = c(txt_scr, emoji_scr))
 
