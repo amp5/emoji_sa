@@ -14,7 +14,7 @@
 library(tidyverse)
 library(lubridate)
 library(gmodels)
-
+library(reshape2)
 
 # Setting path and loading files ------------------------------------------
 path <- "/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis" 
@@ -22,6 +22,9 @@ setwd(path)
 
 # load robust_sa.Rda
 load(file.choose())
+
+users_uniq <- data.frame(unique(final_txt_sa_r$user_id))
+nrow(users_uniq)
 
 final_robust <- select(final_txt_sa_r, -c(txt_o, data, sum_txt, char_n, other, sent_simple))
 
@@ -185,16 +188,59 @@ ggplot(sent_matrix, aes(x = sent_robust, y = txt_sent_scr)) +
  
 
 
-
-sent_matrix$emoji_scr <- ifelse(sent_matrix$sent_robust > 0, "pos", 
-                                ifelse(sent_matrix$sent_robust == 0, "neu", 
-                                       ifelse(sent_matrix$sent_robust < 0, "neg", "error")))
+party_sent <- final_robust[c("party", "sent_robust", "txt_sent_scr")]
 
 
-sent_matrix$txt_scr <- ifelse(sent_matrix$txt_sent_scr > 0, "pos", 
-                                ifelse(sent_matrix$txt_sent_scr == 0, "neu", 
-                                       ifelse(sent_matrix$txt_sent_scr < 0, "neg", "error")))
+party_sent$emoji_scr <- ifelse(party_sent$sent_robust > 0, "pos", 
+                                ifelse(party_sent$sent_robust == 0, "neu", 
+                                       ifelse(party_sent$sent_robust < 0, "neg", "error")))
 
 
-percentages <- subset(sent_matrix, select = c(txt_scr, emoji_scr))
+party_sent$txt_scr <- ifelse(party_sent$txt_sent_scr > 0, "pos", 
+                                ifelse(party_sent$txt_sent_scr == 0, "neu", 
+                                       ifelse(party_sent$txt_sent_scr < 0, "neg", "error")))
+
+dem_scr <- filter(party_sent, party_sent$party == " dem")
+dem_scr$combo <- paste(dem_scr$txt_scr, "-", dem_scr$emoji_scr)
+p_dem <- subset(dem_scr, select = c(party, combo))
+dt <- as_tibble(table(p_dem))
+dt$percent <- dt$n/nrow(dem_scr)
+
+rep_scr <- filter(party_sent, party_sent$party == "rep ")
+rep_scr$combo <- paste(rep_scr$txt_scr, "-", rep_scr$emoji_scr)
+p_rep <- subset(rep_scr, select = c(party, combo))
+rt <- as_tibble(table(p_rep))
+rt$percent <- rt$n/nrow(rep_scr)
+
+both_scr <- filter(party_sent, party_sent$party == "both")
+both_scr$combo <- paste(both_scr$txt_scr, "-", both_scr$emoji_scr)
+p_both <- subset(both_scr, select = c(party, combo))
+bt <- as_tibble(table(p_both))
+bt$percent <- bt$n/nrow(both_scr)
+
+
+
+breakdown_p <- rbind(dt, rt, bt)
+
+
+breakdown_p %>%
+  ggplot(aes(x = combo, y = percent, fill = party)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values=c("#56B4E9","#9999CC", "#CC6666")) +
+  theme_minimal() +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) +
+  labs(x = "Text - Emoji Sentiment", y = "Percent") +
+  geom_text(
+    aes(x = combo, y = percent, label = sprintf("%1.1f%%", 100*percent), group = party),
+    position = position_dodge(width = 1),
+    vjust = -0.5, size = 2.6)
+
+
+
+
+
+
+percentages <- subset(party_sent, select = c(txt_scr, emoji_scr))
+table(percentages)
+
 

@@ -90,13 +90,13 @@ tst_comp <- merge(tst, tst2, by = c("X", "emoji"))
 e_party_sa <- merge(only_party, tst_comp, by = "X", all = T)
 e_party_sa <- subset(e_party_sa, select = -c(emoji.y, data.x, data.y, sum_simp, sum_r))
 
-names(e_party_sa) <- c("unique_id", "text", "emoji", "unique_e_id_lst", "user_id", "id_str",
+names(e_party_sa) <- c("unique_id", "user_id", "text", "emoji", "unique_e_id_lst", "id_str",
                        "created", "lang", "verified", "place_lat", "place_lon", "text_only",
                        "hc", "bs", "tc", "dt", "mr", "rep", "dem", "republican", "democrat", 
                        "other", "sent_simple", "sent_robust")
 
 
-emoji_sa_f <- subset(e_party_sa, select = c(unique_id, text, emoji, created, 
+emoji_sa_f <- subset(e_party_sa, select = c(unique_id, user_id, text, emoji, created, 
                                             republican, democrat, other, sent_simple, sent_robust))
 
 

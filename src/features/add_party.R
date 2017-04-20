@@ -23,7 +23,7 @@ load(file.choose())
 
 # Code --------------------------------------------------------------------
 
-wrk_d <- select(final, c(X, text.x))
+wrk_d <- select(final, c(X, user_id, text.x))
 
 wrk_d <- wrk_d %>%
   mutate(text_only = text.x)
@@ -61,7 +61,7 @@ t$other <- with(t, ifelse(t$republican == 0 & t$democrat == 0, 1, ifelse(t$repub
 
 t <- subset(t, select=-text.x)
 
-w_affil <- merge(final, t, by = "X", all.x = TRUE)
+w_affil <- merge(final, t, by = c("X", "user_id"), all.x = TRUE)
 only_party <-filter(w_affil, w_affil$other == 0)
 
 
