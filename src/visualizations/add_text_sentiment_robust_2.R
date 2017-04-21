@@ -7,7 +7,7 @@
 #    Input_files: sa_etwts.Rda
 #    Output_files: twts_w_e_txt_sa.Rda
 #    Previous_files: add_e_sentiment.R
-#    Required by: TBD
+#    Required by: robust_results_w.R
 #    Status: Working On
 #    Machine: OSX Yosemite v. 10.10.5 (laptop)
 #########################################################################
@@ -45,13 +45,12 @@ just_text$party <- ifelse(just_text$party == "rep dem", "both", just_text$party)
 
 txt_party <- select(just_text, c(unique_id, txt_o, party))
 
-# j_txt <- select(txt_party, -party)
-# j_txt$group <- "all"
-
-
 tidy_twts <- txt_party %>%
-  unnest_tokens(word, txt_o, token = "ngrams", n = 2)
+  unnest_tokens(word, txt_o)
 
+## Used for bi-gram attempt
+# tidy_twts <- txt_party %>%
+#   unnest_tokens(word, txt_o, token = "ngrams", n = 2)
 
 data("stop_words")
 cleaned_twts <- tidy_twts %>%
@@ -90,7 +89,6 @@ twt_words %>%
   arrange(desc(tf_idf))
 # attempt 2 ---------------------------------------------------------------
 
-
 tidy_twts2 <- txt_party %>%
   unnest_tokens(word, txt_o) %>%
   count(unique_id, word, sort = TRUE) 
@@ -102,9 +100,6 @@ tidy_twts2
 twt_words <- tidy_twts2 %>%
   bind_tf_idf(word, party, n)
 
-
-
-
 # attempt 3 ---------------------------------------------------------------
 tidy_twts2 <- txt_party %>%
   unnest_tokens(word, txt_o) %>%
@@ -114,18 +109,12 @@ total_words_twt <- tidy_twts2 %>% group_by(party) %>% summarize(total = sum(n))
 tidy_twts2 <- left_join(tidy_twts2, total_words_twt)
 tidy_twts2
 
-
 twt_words <- tidy_twts2 %>%
   bind_tf_idf(word, party, n)
 
 twt_words %>%
   select(-c(total)) %>%
   arrange(desc(tf_idf))
-
-
-
-
-
 
 reordered <- twt_words %>%
   select(-total) %>%
@@ -143,29 +132,50 @@ reordered %>%
 
 
 # Stopped Here - Need to Re-Think -----------------------------------------
+dem_idf <- subset(reordered, party == " dem", select = c("word", "tf_idf"))
+rep_idf <- subset(reordered, party == "rep ", select = c("word", "tf_idf"))
+both_idf <- subset(reordered, party == "both", select = c("word", "tf_idf"))
 
 
 
 afinn <- get_sentiments("afinn")
 afinn$new <- afinn$score/5
 
-# this lexicon did not have trump as term
-# twtsentiment_a <- cleaned_twts %>%
-#   inner_join(afinn) %>%
-#   count(word, index = unique_id %/% 80, new) %>%
-#   spread(sentiment, n, fill = 0)
+w_afinn_d <- merge(afinn, dem_idf, by = "word")
+w_afinn_d$w_scr <- w_afinn_d$new * w_afinn_d$tf_idf
 
-afinn_word_c <- twt_words %>%
-  inner_join(afinn) %>%
-  count(word, new, sort = TRUE) %>%
+w_afinn_r <- merge(afinn, rep_idf, by = "word")
+w_afinn_r$w_scr <- w_afinn_r$new * w_afinn_r$tf_idf
+
+w_afinn_b <- merge(afinn, both_idf, by = "word")
+w_afinn_b$w_scr <- w_afinn_b$new * w_afinn_b$tf_idf
+
+w_afinn <- merge(w_afinn_d, w_afinn_r, by = "word", all = TRUE)
+w_afinn <- merge(w_afinn, w_afinn_b, by = "word", all = TRUE)
+
+#w_afinn[is.na(w_afinn)] <- 0
+
+w_afinn_scrs <- subset(w_afinn, select = c("word", "w_scr.x", "w_scr.x", "w_scr"))
+w_afinn_scrs$avg_scr <-  rowMeans(subset(w_afinn_scrs, select = c(w_scr.x, w_scr.x, w_scr)), na.rm = TRUE)
+w_afinn_scrs <- subset(w_afinn_scrs, avg_scr != 0)
+
+
+
+w_scrs <- merge(afinn, w_afinn_scrs, by = "word", all = TRUE)
+w_scrs <- subset(w_scrs, select = c("word", "new", "avg_scr"))
+w_scrs$updated_scr <- ifelse(!is.na(w_scrs$avg_scr), w_scrs$avg_scr, w_scrs$new)
+
+afinn_weighted <- subset(w_scrs, select = c("word", "updated_scr"))
+
+
+
+afinn_word_upd <- twt_words %>%
+  inner_join(afinn_weighted) %>%
+  count(word, updated_scr, sort = TRUE) %>%
   ungroup()
 
-afinn_w_weight <- merge(afinn_word_c, twt_words, by)
-
-
-
-afinn_word_c %>%
-  mutate(polarity = ifelse(new > 0, "Positive", "Negative")) %>%
+afinn_word_upd %>%
+  mutate(polarity = ifelse(updated_scr > 0, "Positive", "Negative")) %>%
   group_by(polarity) %>%
   top_n(10, n) %>%
   ggplot(aes(reorder(word, n), n, fill = polarity)) +
@@ -176,12 +186,16 @@ afinn_word_c %>%
   coord_flip() +
   ggtitle("Afinn Lexicon")
 
-all_t_sa_a <- merge(tidy_twts, afinn, by = "word")
-all_t_sa_a$polarity <- ifelse(all_t_sa_a$new > 0, "positive", "negative")
+
+
+
+
+all_t_sa_a <- merge(tidy_twts, afinn_weighted, by = "word")
+all_t_sa_a$polarity <- ifelse(all_t_sa_a$updated_scr > 0, "positive", "negative")
 
 all_sa_nest_a <- all_t_sa_a %>%
   group_by(unique_id) %>%
-  nest(new)
+  nest(updated_scr)
 
 all_sa_nest_a$sum_txt <- lapply(all_sa_nest_a$data, function(x) {
   x$sum_txt <- colSums(x, na.rm=T)
@@ -194,10 +208,10 @@ table(is.na(robust_sa$sum_txt))
 # 26026 15808 
 
 robust_sa$char_n <- sapply(gregexpr("[A-z]\\W", robust_sa$txt_o), length)
-final_txt_sa_r <- filter(robust_sa, !is.na(sum_txt))
-final_txt_sa_r$txt_sent_scr <- as.numeric(final_txt_sa_r$sum_txt)/as.numeric(final_txt_sa_r$char_n)
+final_txt_sa_r_w <- filter(robust_sa, !is.na(sum_txt))
+final_txt_sa_r_w$txt_sent_scr <- as.numeric(final_txt_sa_r_w$sum_txt)/as.numeric(final_txt_sa_r_w$char_n)
 
 # Output ------------------------------------------------------------------
 
-save(final_txt_sa_r,file="data/processed/robust_sa.Rda")
+save(final_txt_sa_r_w,file="data/processed/robust_sa_w.Rda")
 
