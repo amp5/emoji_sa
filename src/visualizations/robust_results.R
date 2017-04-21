@@ -16,6 +16,7 @@ library(lubridate)
 library(gmodels)
 library(reshape2)
 
+
 # Setting path and loading files ------------------------------------------
 path <- "/Users/alexandraplassaras/Desktop/Spring_2017/QMSS_Thesis/QMSS_thesis" 
 setwd(path)
@@ -173,6 +174,8 @@ ggplot(data = hist_both, aes(x = type, y = score)) +
 sent_matrix <- final_robust[c("sent_robust", "txt_sent_scr")]
 cor(sent_matrix, method="pearson")
 
+cor.test(sent_matrix$sent_robust, sent_matrix$txt_sent_scr, method="pearson")
+
 # sent_robust txt_sent_scr
 # sent_robust     1.000000     0.182874
 # txt_sent_scr    0.182874     1.000000
@@ -184,7 +187,7 @@ ggplot(sent_matrix, aes(x = sent_robust, y = txt_sent_scr)) +
   geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
   theme_minimal() +
   labs(x = "Emoji Sentiment", y = " Text Sentiment") +
-  ggtitle(cor(sent_matrix, method="pearson")[2], subtitle = "n = 26,026")
+  ggtitle(cor(sent_matrix, method="pearson")[2], subtitle = "n = 26,026 t = 30.007, df = 26024, p-value < 2.2e-16")
  
 
 
@@ -242,5 +245,31 @@ breakdown_p %>%
 
 percentages <- subset(party_sent, select = c(txt_scr, emoji_scr))
 table(percentages)
+
+
+
+# Looking at top 5 tweets for text and emoji sentiment --------------------
+rank_txt_l <- final_robust[order(final_robust$txt_sent_scr),]
+rank_txt_h <- final_robust[order(-final_robust$txt_sent_scr),]
+
+txt_l <- head(rank_txt_l, 5)
+txt_l <- subset(txt_l, select = c(text, txt_sent_scr))
+
+txt_h <- head(rank_txt_h, 5)
+txt_h<- subset(txt_h, select = c(text, txt_sent_scr))
+
+
+rank_e_l <- final_robust[order(final_robust$sent_robust),]
+rank_e_h <- final_robust[order(-final_robust$sent_robust),]
+
+e_l <- head(rank_e_l, 5)
+e_l <- subset(e_l, select = c(text, sent_robust))
+e_h <- head(rank_e_h, 5)
+e_h <- subset(e_h, select = c(text, sent_robust))
+
+
+txt_extremes <- rbind(txt_l, txt_h)
+
+e_extremes <- rbind(e_l, e_h)
 
 
