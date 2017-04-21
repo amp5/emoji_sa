@@ -24,10 +24,10 @@ setwd(path)
 # load robust_sa_w.Rda
 load(file.choose())
 
-users_uniq <- data.frame(unique(final_txt_sa_r$user_id))
+users_uniq <- data.frame(unique(final_txt_sa_r_w$user_id))
 nrow(users_uniq)
 
-final_robust <- select(final_txt_sa_r, -c(txt_o, data, sum_txt, char_n, other, sent_simple))
+final_robust <- select(final_txt_sa_r_w, -c(txt_o, data, sum_txt, char_n, other, sent_simple))
 
 final_robust$republican <- ifelse(final_robust$republican == 1, "rep", "")
 final_robust$democrat <- ifelse(final_robust$democrat == 1, "dem", "")
@@ -172,13 +172,17 @@ ggplot(data = hist_both, aes(x = type, y = score)) +
 
 
 sent_matrix <- final_robust[c("sent_robust", "txt_sent_scr")]
-cor(sent_matrix, method="pearson")
-
 cor.test(sent_matrix$sent_robust, sent_matrix$txt_sent_scr, method="pearson")
+# Pearson's product-moment correlation
 
-# sent_robust txt_sent_scr
-# sent_robust    1.0000000    0.1679632
-# txt_sent_scr   0.1679632    1.0000000
+# data:  sent_matrix$sent_robust and sent_matrix$txt_sent_scr
+# t = 3.1328, df = 26024, p-value = 0.001733
+# alternative hypothesis: true correlation is not equal to 0
+# 95 percent confidence interval:
+# 0.007268816 0.031558077
+# sample estimates:
+# cor 
+# 0.01941631 
 
 ggplot(sent_matrix, aes(x = sent_robust, y = txt_sent_scr)) +
   geom_point() +
@@ -187,7 +191,7 @@ ggplot(sent_matrix, aes(x = sent_robust, y = txt_sent_scr)) +
   geom_vline(xintercept = 0) + geom_hline(yintercept = 0) +
   theme_minimal() +
   labs(x = "Emoji Sentiment", y = " Text Sentiment") +
-  ggtitle(cor(sent_matrix, method="pearson")[2], subtitle = "n = 26,026, t = 27.486, df = 26024, p-value < 2.2e-16")
+  ggtitle(cor(sent_matrix, method="pearson")[2], subtitle = "n = 26,026, t = 3.1328, df = 26024, p-value = 0.001733")
 
 
 
